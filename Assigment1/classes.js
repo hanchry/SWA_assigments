@@ -36,7 +36,6 @@ function TemperaturePrediction(time, place, type, unit, min, max){
             this.min = this.min * 1.8 + 32;
             this.max = this.max * 1.8 + 32;
         }
-        return this;
     }
     function convertToC(){
         if(this.unit === "F"){
@@ -44,29 +43,34 @@ function TemperaturePrediction(time, place, type, unit, min, max){
             this.min = (this.min - 32) / 1.8;
             this.max = (this.max - 32) / 1.8;
         }
-        return this;
     }
     return {convertToF, convertToC, ...weatherPrediction};
 }
 
-function PrecipitationData(time, place, type, unit, value, precipitationType){
+function PrecipitationPrediction(time, place, value, type, unit, precipitationTypes){
     let weatherData = WeatherData(time, place, value, type, unit);
-    function getPrecipitationType(){
-        return precipitationType;
+    function getExpectedTypes(){
+        return precipitationTypes;
     }
+
+    function matches(data){
+        return data.getType() === type && data.getUnit() === unit && data.getValue() === value && data.getTime() === time && data.getPlace() === place && data.getExpectedTypes() === precipitationTypes;
+    }
+
     function convertToInches(){
-        if(this.unit === "MM"){
-            this.unit = "Inches";
-            this.value = this.value / 25.4;
+        if(unit === "MM"){
+            unit = "Inches";
+            value = value / 25.4;
         }
     }
     function convertToMM(){
-        if(this.unit === "Inches"){
-            this.unit = "MM";
-            this.value = this.value * 25.4;
+        if(unit === "Inches"){
+            unit = "MM";
+            value = value * 25.4;
         }
     }
-    return {getPrecipitationType, convertToInches, convertToMM, ...weatherData};
+
+    return {getExpectedTypes,convertToInches,convertToMM, matches, ...weatherData};
 }
 
 function WindPrediction(time, place, type, unit, min, max, expectedDirections){
@@ -118,7 +122,7 @@ function Temperature(time, place, value, type, unit){
     return {convertToF, convertToC, ...weatherData};
 }
 
-function PrecipitationPrediction(time, place, value, type, unit, precipitationType){
+function Precipitation(time, place, value, type, unit, precipitationType){
     let weatherData = WeatherData(time, place, value, type, unit);
     function getPrecipitationType(){
         return precipitationType;
@@ -137,10 +141,7 @@ function PrecipitationPrediction(time, place, value, type, unit, precipitationTy
         }
         return this;
     }
-    function matches(data){
-        return data.getType() === type && data.getUnit() === unit && data.getValue() === value && data.getTime() === time && data.getPlace() === place && data.getPrecipitationType() === precipitationType;
-    }
-    return {getPrecipitationType,convertToInches,convertToMM, matches, ...weatherData};
+    return {getPrecipitationType,convertToInches,convertToMM, ...weatherData};
 }
 
 function Wind(time, place, value, type, unit, direction){
