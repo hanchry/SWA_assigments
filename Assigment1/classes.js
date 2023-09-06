@@ -119,7 +119,7 @@ function Temperature(time, place, value, type, unit){
         }
         return this;
     }
-    return {convertToF, convertToC, ...weatherData};
+    return {convertToF, convertToC, ...weatherData, getUnit:()=>unit, getValue:()=>value};
 }
 
 function Precipitation(time, place, value, type, unit, precipitationType){
@@ -141,7 +141,7 @@ function Precipitation(time, place, value, type, unit, precipitationType){
         }
         return this;
     }
-    return {getPrecipitationType,convertToInches,convertToMM, ...weatherData};
+    return {getPrecipitationType,convertToInches,convertToMM, ...weatherData, getUnit:()=>unit, getValue:()=>value};
 }
 
 function Wind(time, place, value, type, unit, direction){
@@ -163,7 +163,12 @@ function Wind(time, place, value, type, unit, direction){
         }
         return this;
     }
-    return {getDirection,convertToMPH,convertToMS, ...weatherData};
+    return {getDirection,convertToMPH,convertToMS, ...weatherData, getUnit:()=>unit, getValue:()=>value};
+}
+
+function CloudCoverage(time, place, value, type, unit){
+    let weatherData = WeatherData(time, place, value, type, unit);
+    return {...weatherData};
 }
 
 function CloudCoverage(time, place, value, type, unit){
