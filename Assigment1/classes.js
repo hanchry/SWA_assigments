@@ -44,7 +44,7 @@ function TemperaturePrediction(time, place, type, unit, min, max){
             this.max = (this.max - 32) / 1.8;
         }
     }
-    return {convertToF, convertToC, ...weatherPrediction};
+    return {convertToF, convertToC, getUnit: ()=> unit, getValue: ()=> value, ...weatherPrediction};
 }
 
 function PrecipitationPrediction(time, place, value, type, unit, precipitationTypes){
@@ -70,7 +70,7 @@ function PrecipitationPrediction(time, place, value, type, unit, precipitationTy
         }
     }
 
-    return {getExpectedTypes,convertToInches,convertToMM, matches, ...weatherData};
+    return {getExpectedTypes,convertToInches,convertToMM, matches, ...weatherData,getUnit: ()=> unit, getValue: ()=> value};
 }
 
 function WindPrediction(time, place, type, unit, min, max, expectedDirections){
