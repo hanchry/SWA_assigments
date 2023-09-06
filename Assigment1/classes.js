@@ -1,48 +1,38 @@
-class Event{
-    constructor(time, place){
-        this.time = time;
-        this.place = place;
-    }
-    getTime(){
-        return this.time;
-    }
-    getPlace(){
-        return this.place;
-    }
+function Event(time, place){
+    function getTime(){ return time; }
+    function getPlace(){ return place; }
+    return {getTime, getPlace};
 }
 
-class WeatherPrediction extends Event{
-    constructor(time, place, type, unit){
-        super();
-        this.time = time;
-        this.place = place;
-        this.type = type;
-        this.unit = unit;
+function WeatherData(time, place, value, type, unit){
+    let event = Event(time, place);
+    function getValue(){
+        return value;
     }
-    matches(data){
-        return data instanceof WeatherData;
+    function getType(){
+        return type;
     }
-    getMax(){
-        return this.max;
+    function getUnit(){
+        return unit;
     }
-    getMin(){
-        return this.min;
-    }
-    getType(){
-        return this.type;
-    }
-    getUnit(){
-        return this.unit;
-    }
+    return {getValue,getType,getUnit, ...event};
 }
 
-class TemperaturePrediction extends WeatherPrediction{
-    constructor(time, place, type, unit, min, max){
-        super(time, place, type, unit);
-        this.min = min;
-        this.max = max;
-    }
-    convertToF(){
+
+function WeatherPrediction(time, place, type, unit, min, max){
+    let event = Event(time, place);
+    function matches(data){ return data.getType() === type && data.getUnit() === unit && data.getValue() >= min && data.getValue() <= max && data.getTime() === time && data.getPlace() === place; }
+    function getMax(){ return max; }
+    function getMin(){ return min; }
+    function getType(){ return type; }
+    function getUnit(){ return unit; }
+    return {matches, getMax, getMin, getType, getUnit, ...event};
+}
+
+
+function TemperaturePrediction(time, place, type, unit, min, max){
+    let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
+    function convertToF(){
         if(this.unit === "C"){
             this.unit = "F";
             this.min = this.min * 1.8 + 32;
@@ -50,7 +40,7 @@ class TemperaturePrediction extends WeatherPrediction{
         }
         return this;
     }
-    convertToC(){
+    function convertToC(){
         if(this.unit === "F"){
             this.unit = "C";
             this.min = (this.min - 32) / 1.8;
@@ -58,72 +48,59 @@ class TemperaturePrediction extends WeatherPrediction{
         }
         return this;
     }
+    return {convertToF, convertToC, ...weatherPrediction};
 }
 
-class PrecipitationPrediction extends WeatherPrediction{
-    constructor(time, place, type, unit, min, max, expectedTypes){
-        super(time, place, type, unit);
-        this.min = min;
-        this.max = max;
-        this.expectedTypes = expectedTypes;
+
+function PrecipitationData(time, place, type, unit, value, precipitationType){
+    let weatherData = WeatherData(time, place, value, type, unit);
+    function getPrecipitationType(){
+        return precipitationType;
     }
-    getExpectedTypes(){
-        return this.expectedTypes;
-    }
-    matches(data){
-        return data instanceof PrecipitationData;
-    }
-    convertToInches(){
+    function convertToInches(){
         if(this.unit === "MM"){
             this.unit = "Inches";
-            this.min = this.min / 25.4;
-            this.max = this.max / 25.4;
+            this.value = this.value / 25.4;
         }
     }
-    convertToMM(){
+    function convertToMM(){
         if(this.unit === "Inches"){
             this.unit = "MM";
-            this.min = this.min * 25.4;
-            this.max = this.max * 25.4;
+            this.value = this.value * 25.4;
         }
     }
+    return {getPrecipitationType, convertToInches, convertToMM, ...weatherData};
 }
 
 
-class WindPrediction extends WeatherPrediction{
-    constructor(time, place, type, unit, min, max, expectedDirections){
-        super(time, place, type, unit);
-        this.min = min;
-        this.max = max;
-        this.expectedDirections = expectedDirections;
+function WindPrediction(time, place, type, unit, min, max, expectedDirections){
+    let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
+    function getExpectedDirections(){
+        return expectedDirections;
     }
-    getExpectedDirections(){
-        return this.expectedDirections;
-    }
-    matches(data){
+    function matches(data){
         return data instanceof WindData;
     }
-    convertToMPH(){
+    function convertToMPH(){
         if(this.unit === "MS"){
             this.unit = "MPH";
             this.min = this.min * 2.23694;
             this.max = this.max * 2.23694;
         }
     }
-    convertToMS(){
+    function convertToMS(){
         if(this.unit === "MPH"){
             this.unit = "MS";
             this.min = this.min / 2.23694;
             this.max = this.max / 2.23694;
         }
     }
+    return {getExpectedDirections, matches, convertToMPH, convertToMS, ...weatherPrediction};
 }
 
 
-class CloudCoveragePrediction extends WeatherPrediction{
-    constructor(time, place, type, unit, min, max){
-        super(time, place, type, unit);
-        this.min = min;
-        this.max = max;
-    }
+function CloudCoveragePrediction(time, place, type, unit, min, max){
+    let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
+    return {...weatherPrediction};
 }
+
