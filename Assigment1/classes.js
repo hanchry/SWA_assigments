@@ -18,7 +18,6 @@ function WeatherData(time, place, value, type, unit){
     return {getValue,getType,getUnit, ...event};
 }
 
-
 function WeatherPrediction(time, place, type, unit, min, max){
     let event = Event(time, place);
     function matches(data){ return data.getType() === type && data.getUnit() === unit && data.getValue() >= min && data.getValue() <= max && data.getTime() === time && data.getPlace() === place; }
@@ -28,7 +27,6 @@ function WeatherPrediction(time, place, type, unit, min, max){
     function getUnit(){ return unit; }
     return {matches, getMax, getMin, getType, getUnit, ...event};
 }
-
 
 function TemperaturePrediction(time, place, type, unit, min, max){
     let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
@@ -51,7 +49,6 @@ function TemperaturePrediction(time, place, type, unit, min, max){
     return {convertToF, convertToC, ...weatherPrediction};
 }
 
-
 function PrecipitationData(time, place, type, unit, value, precipitationType){
     let weatherData = WeatherData(time, place, value, type, unit);
     function getPrecipitationType(){
@@ -72,14 +69,13 @@ function PrecipitationData(time, place, type, unit, value, precipitationType){
     return {getPrecipitationType, convertToInches, convertToMM, ...weatherData};
 }
 
-
 function WindPrediction(time, place, type, unit, min, max, expectedDirections){
     let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
     function getExpectedDirections(){
         return expectedDirections;
     }
     function matches(data){
-        return data instanceof WindData;
+        return data.getType() === type && data.getUnit() === unit && data.getValue() >= min && data.getValue() <= max && data.getTime() === time && data.getPlace() === place && expectedDirections.includes(data.getDirection());
     }
     function convertToMPH(){
         if(this.unit === "MS"){
@@ -98,9 +94,78 @@ function WindPrediction(time, place, type, unit, min, max, expectedDirections){
     return {getExpectedDirections, matches, convertToMPH, convertToMS, ...weatherPrediction};
 }
 
-
 function CloudCoveragePrediction(time, place, type, unit, min, max){
     let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
     return {...weatherPrediction};
 }
 
+function Temperature(time, place, value, type, unit){
+    let weatherData = WeatherData(time, place, value, type, unit);
+    function convertToF(){
+        if(unit === "C"){
+            unit = "F";
+            value = value * 1.8 + 32;
+        }
+        return this;
+    }
+    function convertToC(){
+        if(unit === "F"){
+            unit = "C";
+            value = (value - 32) / 1.8;
+        }
+        return this;
+    }
+    return {convertToF, convertToC, ...weatherData};
+}
+
+function PrecipitationPrediction(time, place, value, type, unit, precipitationType){
+    let weatherData = WeatherData(time, place, value, type, unit);
+    function getPrecipitationType(){
+        return precipitationType;
+    }
+    function convertToInches(){
+        if(unit === "MM"){
+            unit = "Inches";
+            value = value / 25.4;
+        }
+        return this;
+    }
+    function convertToMM(){
+        if(unit === "Inches"){
+            unit = "MM";
+            value = value * 25.4;
+        }
+        return this;
+    }
+    function matches(data){
+        return data.getType() === type && data.getUnit() === unit && data.getValue() === value && data.getTime() === time && data.getPlace() === place && data.getPrecipitationType() === precipitationType;
+    }
+    return {getPrecipitationType,convertToInches,convertToMM, matches, ...weatherData};
+}
+
+function Wind(time, place, value, type, unit, direction){
+    let weatherData = WeatherData(time, place, value, type, unit);
+    function getDirection(){
+        return direction;
+    }
+    function convertToMPH(){
+        if(unit === "MS"){
+            unit = "MPH";
+            value = value * 2.237;
+        }
+        return this;
+    }
+    function convertToMS(){
+        if(unit === "MPH"){
+            unit = "MS";
+            value = value / 2.237;
+        }
+        return this;
+    }
+    return {getDirection,convertToMPH,convertToMS, ...weatherData};
+}
+
+function CloudCoverage(time, place, value, type, unit){
+    let weatherData = WeatherData(time, place, value, type, unit);
+    return {...weatherData};
+}
