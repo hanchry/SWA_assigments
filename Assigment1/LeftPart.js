@@ -37,7 +37,7 @@ function Temperature(time, place, value, type, unit){
         }
         return this;
     }
-    return {convertToF, convertToC, ...weatherData};
+    return {convertToF, convertToC, ...weatherData, getUnit:()=>unit, getValue:()=>value};
 }
 function Precipitation(time, place, value, type, unit, precipitationType){
     let weatherData = WeatherData(time, place, value, type, unit);
@@ -58,7 +58,7 @@ function Precipitation(time, place, value, type, unit, precipitationType){
         }
         return this;
     }
-    return {getPrecipitationType,convertToInches,convertToMM, ...weatherData};
+    return {getPrecipitationType,convertToInches,convertToMM, ...weatherData, getUnit:()=>unit, getValue:()=>value};
 }
 function Wind(time, place, value, type, unit, direction){
     let weatherData = WeatherData(time, place, value, type, unit);
@@ -79,7 +79,7 @@ function Wind(time, place, value, type, unit, direction){
         }
         return this;
     }
-    return {getDirection,convertToMPH,convertToMS, ...weatherData};
+    return {getDirection,convertToMPH,convertToMS, ...weatherData, getUnit:()=>unit, getValue:()=>value};
 }
 function CloudCoverage(time, place, value, type, unit){
     let weatherData = WeatherData(time, place, value, type, unit);
@@ -98,7 +98,11 @@ function WeatherPrediction(time, place, type, unit, min, max){
     function getUnit(){ return unit; }
     return {matches, getMax, getMin, getType, getUnit, ...event};
 }
+//
+// let weatherData = WeatherData("2018-04-26T08:00:00", "Horsens", 10, "Temperature", "C");
+// let weatherPrediction = WeatherPrediction("2018-04-26T08:00:00", "Horsens", "Temperature", "C", 10, 20);
+// console.log(weatherPrediction.matches(weatherData));
 
-let weatherData = WeatherData("2018-04-26T08:00:00", "Horsens", 10, "Temperature", "C");
-let weatherPrediction = WeatherPrediction("2018-04-26T08:00:00", "Horsens", "Temperature", "C", 10, 20);
-console.log(weatherPrediction.matches(weatherData));
+// let temperature = Temperature("2018-04-26T08:00:00", "Horsens", 15, "Temperature", "C");
+// console.log(temperature.convertToF().getValue());
+// console.log(temperature.convertToC().getValue());
