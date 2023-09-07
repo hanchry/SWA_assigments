@@ -1,0 +1,77 @@
+table {
+    width: 80%;
+    border-collapse: collapse;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+h1{
+    width: 80%;
+    color: gray;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+    position: relative;
+    left: 50%;
+    margin-top: 40px;
+    transform: translate(-50%, 0);
+}
+
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+
+th {
+    width: 50%;
+    background-color: #000;
+    color: white;
+    padding: 10px;
+}
+
+
+td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+form {
+    width: 80%;
+    height: 50%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-top: 10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+form select, form input{
+    margin-inline: 20px;
+}
+
+select#temperature-unit, select#wind-speed-unit {
+    padding: 10px; /* Add some padding for better readability */
+    font-size: 16px; /* Increase font size */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 5px; /* Round the corners */
+}
+
+/* Style for the options within the select */
+#weather-container{
+    display: flex;
+    width: 80%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    flex-direction: row;
+    justify-content: space-between;
+}
+#weather-container > p:first-child{
+    font-weight: bold;
+    color: mediumblue;
+}
+#weather-container > p{
+    margin: 0;
+}
