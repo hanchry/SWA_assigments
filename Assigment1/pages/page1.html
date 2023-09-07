@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+</body>
+</html>
+
+<script>
+    const horsens = {
+        latitude: 55.860916,
+        longitude: 9.850000
+    };
+
+
+    var xhr = new XMLHttpRequest();
+    var url = "https://api.open-meteo.com/v1/forecast" +
+        "?latitude=" + horsens.latitude +
+        "&longitude=" + horsens.longitude +
+        "&hourly=temperature_2m" +
+        "&current_weather=true" +
+        "&timezone=Europe%2FBerlin" +
+        "&start_date=2023-09-07" +
+        "&end_date=2023-09-08";
+
+    xhr.open("GET", url, true);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response);
+            createTempritureTable(response.hourly, response.hourly_units);
+        } else if (xhr.readyState === 4) {
+            console.error("Request failed with status:", xhr.status);
+        }
+    };
+
+    xhr.send()
+
+
+    function createTempritureTable(data, units) {
+        let table = document.createElement("table");
+        let tr = document.createElement("tr");
+        let th = document.createElement("th");
+        let th2 = document.createElement("th");
+        th.innerText = "Time";
+        th2.innerText = "Temperature";
+        tr.appendChild(th);
+        tr.appendChild(th2);
+        table.appendChild(tr);
+
+        for (let i = 0; i < data.time.length; i++){
+            let tr = document.createElement("tr");
+            let td = document.createElement("td");
+            let td2 = document.createElement("td");
+            td.innerText = data.time[i];
+            td2.innerText = data.temperature_2m[i] + " " + units.temperature_2m;
+            tr.appendChild(td);
+            tr.appendChild(td2);
+            table.appendChild(tr);
+        }
+        document.body.appendChild(table);
+    }
+</script>
