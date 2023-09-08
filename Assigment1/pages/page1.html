@@ -62,7 +62,8 @@
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
             console.log(response);
-            // createForcastTable(TemperatureConverter(response, horsens.name));
+            createCurrentWeather(convertWeatherData(response, horsens.name));
+            createForcastTable(convertForcastData(response, horsens.name));
         } else if (xhr.readyState === 4) {
             console.error("Request failed with status:", xhr.status);
         }
@@ -125,32 +126,40 @@
             document.getElementById("content").appendChild(h2);
 
         if(data !== undefined) {
+            let [time, date] = splitTimeDate(data[0].getTime());
+
             let p6 = document.createElement("p");
-            p6.innerText = "Horsens";
+            p6.innerText = data[0].getPlace();
             weatherContainer.appendChild(p6);
 
-            let p4 = document.createElement("p");
-            p4.innerText = "Time: 10:00";
-            weatherContainer.appendChild(p4);
-
             let p5 = document.createElement("p");
-            p5.innerText = "Date: 10/10/2020";
+            p5.innerText = "Date: " + date;
             weatherContainer.appendChild(p5);
 
+            let p4 = document.createElement("p");
+            p4.innerText = "Time: " + time;
+            weatherContainer.appendChild(p4);
+
             let p = document.createElement("p");
-            p.innerText = "Temperature: 20°C";
+            p.innerText = "Temperature: " + data[0].getValue() + " " + data[0].getUnit();
             weatherContainer.appendChild(p);
 
             let p2 = document.createElement("p");
-            p2.innerText = "Wind speed: 10 m/s";
+            p2.innerText = "Wind speed: " + data[1].getValue() + " " + data[1].getUnit();
             weatherContainer.appendChild(p2);
 
             let p3 = document.createElement("p");
-            p3.innerText = "Wind direction: 10°";
+            p3.innerText = "Wind direction: " + data[1].getDirection() + "°";
             weatherContainer.appendChild(p3);
         }
 
         document.getElementById("content").appendChild(weatherContainer);
+    }
+
+    function splitTimeDate(data){
+        let time = data.split("T")[1];
+        let date = data.split("T")[0];
+        return [time, date];
     }
 
 </script>
