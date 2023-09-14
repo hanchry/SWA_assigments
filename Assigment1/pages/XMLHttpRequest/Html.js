@@ -1,77 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="../classes.js" defer></script>
-    <script src="../converter.js" defer></script>
-    <link rel="stylesheet" type="text/css" href="../style.css">
-</head>
-<body>
 
-<div id="content" style="padding: 10px; display: flex; flex-direction: column; height: 100%">
-    <form>
-        <select id="temperature-unit" name="temperature-unit">
-            <optgroup label="Temperature Units">
-                <option value="celsius">Celsius (°C)</option>
-                <option value="fahrenheit">Fahrenheit (°F)</option>
-                <option value="kelvin">Kelvin (K)</option>
-            </optgroup>
-        </select>
-        <select id="wind-speed-unit" name="wind-speed-unit">
-            <optgroup label="Wind Speed Units">
-                <option value="meters-per-second">Meters per Second (m/s)</option>
-                <option value="kilometers-per-hour">Kilometers per Hour (km/h)</option>
-                <option value="miles-per-hour">Miles per Hour (mph)</option>
-            </optgroup>
-        </select>
-        <input type="submit" value="Submit">
-    </form>
-    <!--    <h1>Current</h1>-->
-    <!--    -->
-    <!--    <h1>Forcast</h1>-->
-</div>
-
-</body>
-</html>
-
-<script type="module">
-    const horsens = {
-        name: "Horsens",
-        latitude: 55.860916,
-        longitude: 9.850000
-    };
-    createCurrentWeather();
-    createForcastTable();
-
-
-    var xhr = new XMLHttpRequest();
-    var url = "https://api.open-meteo.com/v1/forecast" +
-        "?latitude=" + horsens.latitude +
-        "&longitude=" + horsens.longitude +
-        "&hourly=temperature_2m" +
-        "&current_weather=true" +
-        "&precipitation_unit=inch" +
-        "&timezone=Europe%2FBerlin" +
-        "&start_date=2023-09-07" +
-        "&end_date=2023-09-08";
-
-    xhr.open("GET", url, true);
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            console.log(response);
-            createCurrentWeather(convertWeatherData(response, horsens.name));
-            createForcastTable(convertForcastData(response, horsens.name));
-        } else if (xhr.readyState === 4) {
-            console.error("Request failed with status:", xhr.status);
-        }
-    };
-
-    xhr.send()
-
-
+function Html(){
     function createForcastTable(data) {
         if (document.getElementById("table") !== null) {
             document.getElementById("table").remove();
@@ -111,7 +39,6 @@
         }
         document.getElementById("content").appendChild(table);
     }
-
     function createCurrentWeather(data) {
         const weatherContainer = document.createElement('div');
         weatherContainer.id = "weather-container";
@@ -120,10 +47,10 @@
             document.getElementById("current").remove();
         }
 
-            let h2 = document.createElement("h1");
-            h2.id = "current";
-            h2.innerText = "Current weather";
-            document.getElementById("content").appendChild(h2);
+        let h2 = document.createElement("h1");
+        h2.id = "current";
+        h2.innerText = "Current weather";
+        document.getElementById("content").appendChild(h2);
 
         if(data !== undefined) {
             let [time, date] = splitTimeDate(data[0].getTime());
@@ -155,11 +82,11 @@
 
         document.getElementById("content").appendChild(weatherContainer);
     }
-
     function splitTimeDate(data){
         let time = data.split("T")[1];
         let date = data.split("T")[0];
         return [time, date];
     }
 
-</script>
+    return {createForcastTable, createCurrentWeather};
+}

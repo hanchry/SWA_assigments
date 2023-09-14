@@ -51,7 +51,7 @@ form select, form input{
     margin-inline: 20px;
 }
 
-select#temperature-unit, select#wind-speed-unit {
+select#temperature-unit, select#wind-speed-unit, select#place {
     padding: 10px; /* Add some padding for better readability */
     font-size: 16px; /* Increase font size */
     border: 1px solid #ccc; /* Add a border */
