@@ -8,6 +8,8 @@
     <script src="../../classes.js" defer></script>
     <script src="../../converter.js" defer></script>
     <script src="CustomXMLHttpRequest.js" defer> </script>
+    <script src="Html.js" defer> </script>
+    <script src="../../CityService.js" defer> </script>
 
     <link rel="stylesheet" type="text/css" href="../../style.css">
 
@@ -48,21 +50,27 @@
 </html>
 
 <script type="module">
-    const horsens = {
-        name: "Horsens",
-        latitude: 55.860916,
-        longitude: 9.850000
-    };
-
-
-
+    let cityService = new CityService();
+    let html = new Html();
+    let converter = new Converter();
     let request = new CustomXMLHttpRequest();
-    request.addListener(log);
-    request.requestData(horsens);
 
-    function log(){
-        console.log("WORKS2");
+    function weatherCallback(data){
+        let converted = converter.convertToWeatherData(data, place)
+        html.createCurrentWeather(converted)
     }
+    function forecastCallback(data){
+        let converted = converter.convertToForcastData(data, place)
+        html.createForcastTable(converted)
+    }
+
+    request.addListener(weatherCallback)
+    request.addListener(forecastCallback)
+
+
+    let place = cityService.get("Horsens")
+    request.requestData(place)
+
 
 
 

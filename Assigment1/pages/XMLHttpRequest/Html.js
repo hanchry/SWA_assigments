@@ -18,7 +18,7 @@ function Html(){
         let tr = document.createElement("tr");
         let th = document.createElement("th");
         let th2 = document.createElement("th");
-        th.innerText = "Time";
+        th.innerText = "Date Time";
         th2.innerText = "Temperature";
         tr.appendChild(th);
         tr.appendChild(th2);
@@ -56,7 +56,7 @@ function Html(){
             let [time, date] = splitTimeDate(data[0].getTime());
 
             let p6 = document.createElement("p");
-            p6.innerText = data[0].getPlace();
+            p6.innerText = data[0].getPlace().name;
             weatherContainer.appendChild(p6);
 
             let p5 = document.createElement("p");

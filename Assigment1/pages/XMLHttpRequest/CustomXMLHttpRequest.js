@@ -18,7 +18,8 @@ function CustomXMLHttpRequest(){
     function addListener(method){
         xhr.addEventListener("readystatechange", () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                method();
+                var response = JSON.parse(xhr.responseText);
+                method(response);
             }
             else if (xhr.readyState === 4) {
                 console.log("Request failed with status: " + xhr.status);
