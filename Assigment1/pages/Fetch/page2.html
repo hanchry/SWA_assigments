@@ -3,11 +3,11 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>XMLHttpRequest</title>
+    <title>Fetch</title>
 
     <script src="../../classes.js" defer></script>
     <script src="../../converter.js" defer></script>
-    <script src="CustomXMLHttpRequest.js" defer></script>
+    <script src="CustomFetch.js" defer></script>
     <script src="../commonJS/Html.js" defer></script>
     <script src="../../CityService.js" defer></script>
 
@@ -53,65 +53,43 @@
     let cityService = new CityService();
     let html = new Html();
     let converter = new Converter();
-    let request = new CustomXMLHttpRequest();
+    let request = new CustomFetch();
 
     let place;
     let placeF;
     let temperatureUnitF;
     let windSpeedUnitF;
-
-
     document.querySelector("form").addEventListener("submit", function (event) {
         event.preventDefault();
         placeF = document.getElementById("place").value;
         temperatureUnitF = document.getElementById("temperature-unit").value;
         windSpeedUnitF = document.getElementById("wind-speed-unit").value;
-
+      
         place = cityService.get(placeF);
-        request.requestData(place)
-    });
-
-    function weatherCallback(data) {
-        let converted = converter.convertToWeatherData(data, place)
-        if(temperatureUnitF === "fahrenheit"){
-            converted[0].convertToF();
+      
+        Promise.all([request.requestData(place).then(weatherCallback), request.requestData(place).then(forecastCallback)])
+          .catch(error => console.error(error));
+      });
+      
+      function weatherCallback(data) {
+        let converted = converter.convertToWeatherData(data, place);
+        if (temperatureUnitF === "fahrenheit") {
+          converted[0].convertToF();
         }
-        if(windSpeedUnitF === "miles-per-hour"){
-            converted[1].convertToMPH();
+        if (windSpeedUnitF === "miles-per-hour") {
+          converted[1].convertToMPH();
         }
-        html.createCurrentWeather(converted)
-    }
-
-    function forecastCallback(data) {
-        let converted = converter.convertToForcastData(data, place)
-        if(temperatureUnitF === "fahrenheit"){
-           converted.forEach(function (item) {
-               item.convertToF();
-           })
+        html.createCurrentWeather(converted);
+      }
+      
+      function forecastCallback(data) {
+        let converted = converter.convertToForcastData(data, place);
+        if (temperatureUnitF === "fahrenheit") {
+          converted.forEach(function (item) {
+            item.convertToF();
+          });
         }
-        html.createForcastTable(converted)
-    }
-
-    request.addListener(weatherCallback)
-    request.addListener(forecastCallback)
-
-
+        html.createForcastTable(converted);
+      }
+      
 </script>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f0f0f0;
-        color: #333;
-    }
-    
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    }    
-</style>       

@@ -38,7 +38,7 @@ function Html(){
             table.appendChild(tr);
         }
         document.getElementById("content").appendChild(table);
-    }
+    }  
     function createCurrentWeather(data) {
         if(document.getElementById("weather-container") !== null){
             document.getElementById("weather-container").remove();

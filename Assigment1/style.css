@@ -1,77 +1,130 @@
-table {
-    width: 80%;
-    border-collapse: collapse;
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, 0);
-}
-h1{
-    width: 80%;
-    color: gray;
-    font-family: "Times New Roman", Times, serif;
-    font-size: 20px;
-    position: relative;
-    left: 50%;
-    margin-top: 40px;
-    transform: translate(-50%, 0);
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.5;
 }
 
-
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-
-th {
-    width: 50%;
-    background-color: #000;
-    color: white;
-    padding: 10px;
-}
-
-
-td {
-    border: 1px solid #ccc;
-    padding: 8px;
+nav {
+    background-color: #333;
+    padding: 0.5em 0;
     text-align: center;
 }
-form {
-    width: 80%;
-    height: 50%;
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, 0);
-    margin-top: 10%;
+
+nav ul {
+    padding: 0;
+    list-style-type: none;
     display: flex;
-    flex-direction: row;
     justify-content: center;
-
-}
-form select, form input{
-    margin-inline: 20px;
+    align-items: center;
 }
 
-select#temperature-unit, select#wind-speed-unit, select#place {
-    padding: 10px; /* Add some padding for better readability */
-    font-size: 16px; /* Increase font size */
-    border: 1px solid #ccc; /* Add a border */
-    border-radius: 5px; /* Round the corners */
+nav li {
+    margin: 0 1em;
 }
 
-/* Style for the options within the select */
-#weather-container{
+nav a {
+    text-decoration: none;
+    color: #f9f9f9;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#content {
     display: flex;
-    width: 80%;
-    position: relative;
-    left: 50%;
-    transform: translate(-50%, 0);
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
-#weather-container > p:first-child{
-    font-weight: bold;
-    color: mediumblue;
+
+form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
 }
-#weather-container > p{
+
+form select, input[type="submit"] {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+form select:focus, input[type="submit"]:focus {
+    border-color: #007BFF;
+}
+
+input[type="submit"] {
+    cursor: pointer;
+    background-color: #007BFF;
+    color: #fff;
+    grid-column: span 3;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+h1, h2 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#weather-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+}
+
+#weather-container p {
     margin: 0;
 }
