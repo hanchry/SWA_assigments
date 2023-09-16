@@ -7,9 +7,9 @@
 
     <script src="../../classes.js" defer></script>
     <script src="../../converter.js" defer></script>
-    <script src="CustomXMLHttpRequest.js" defer> </script>
-    <script src="Html.js" defer> </script>
-    <script src="../../CityService.js" defer> </script>
+    <script src="CustomXMLHttpRequest.js" defer></script>
+    <script src="Html.js" defer></script>
+    <script src="../../CityService.js" defer></script>
 
     <link rel="stylesheet" type="text/css" href="../../style.css">
 
@@ -20,22 +20,20 @@
     <form>
         <select id="place" name="place">
             <optgroup label="Place">
-                <option value="celsius">Horsens</option>
-                <option value="fahrenheit">Copenhagen</option>
-                <option value="kelvin">Tokyo</option>
+                <option value="Horsens">Horsens</option>
+                <option value="Copenhagen">Copenhagen</option>
+                <option value="Tokyo">Tokyo</option>
             </optgroup>
         </select>
         <select id="temperature-unit" name="temperature-unit">
             <optgroup label="Temperature Units">
                 <option value="celsius">Celsius (°C)</option>
                 <option value="fahrenheit">Fahrenheit (°F)</option>
-                <option value="kelvin">Kelvin (K)</option>
             </optgroup>
         </select>
         <select id="wind-speed-unit" name="wind-speed-unit">
             <optgroup label="Wind Speed Units">
                 <option value="meters-per-second">Meters per Second (m/s)</option>
-                <option value="kilometers-per-hour">Kilometers per Hour (km/h)</option>
                 <option value="miles-per-hour">Miles per Hour (mph)</option>
             </optgroup>
         </select>
@@ -55,23 +53,45 @@
     let converter = new Converter();
     let request = new CustomXMLHttpRequest();
 
-    function weatherCallback(data){
+    let place;
+    let placeF;
+    let temperatureUnitF;
+    let windSpeedUnitF;
+
+
+    document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        placeF = document.getElementById("place").value;
+        temperatureUnitF = document.getElementById("temperature-unit").value;
+        windSpeedUnitF = document.getElementById("wind-speed-unit").value;
+
+        place = cityService.get(placeF);
+        request.requestData(place)
+    });
+
+    function weatherCallback(data) {
         let converted = converter.convertToWeatherData(data, place)
+        if(temperatureUnitF === "fahrenheit"){
+            converted[0].convertToF();
+        }
+        if(windSpeedUnitF === "miles-per-hour"){
+            converted[1].convertToMPH();
+        }
         html.createCurrentWeather(converted)
     }
-    function forecastCallback(data){
+
+    function forecastCallback(data) {
         let converted = converter.convertToForcastData(data, place)
+        if(temperatureUnitF === "fahrenheit"){
+           converted.forEach(function (item) {
+               item.convertToF();
+           })
+        }
         html.createForcastTable(converted)
     }
 
     request.addListener(weatherCallback)
     request.addListener(forecastCallback)
-
-
-    let place = cityService.get("Horsens")
-    request.requestData(place)
-
-
 
 
 </script>

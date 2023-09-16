@@ -40,12 +40,14 @@ function Html(){
         document.getElementById("content").appendChild(table);
     }
     function createCurrentWeather(data) {
-        const weatherContainer = document.createElement('div');
-        weatherContainer.id = "weather-container";
-
-        if (document.getElementById("current") !== null) {
+        if(document.getElementById("weather-container") !== null){
+            document.getElementById("weather-container").remove();
+        }
+        if(document.getElementById("current") !== null){
             document.getElementById("current").remove();
         }
+        const weatherContainer = document.createElement('div');
+        weatherContainer.id = "weather-container";
 
         let h2 = document.createElement("h1");
         h2.id = "current";
