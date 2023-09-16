@@ -214,9 +214,7 @@ function Wind(time, place, value, type, unit, direction) {
     }
 
     function convertToMPH() {
-        console.log(1)
         if (unit.includes("s")) {
-            console.log(2)
             unit = "MPH";
             value = (value * 2.237).toFixed(3);
         }
