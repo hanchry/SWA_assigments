@@ -60,10 +60,8 @@ function TemperaturePrediction(time, place, type, unit, min, max) {
     function convertToF() {
         if (unit.includes("C")) {
             unit = "F";
-            // console.log(this.getMax() + "C")
             min = ((min * 1.8) + 32).toFixed(3);
             max = ((max * 1.8) + 32).toFixed(3);
-            // console.log(this.getMax() + "F")
         }
         return this;
     }
