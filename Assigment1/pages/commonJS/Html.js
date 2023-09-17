@@ -8,6 +8,7 @@ function Html(){
             document.getElementById("forcast").remove();
         }
 
+
         let h1 = document.createElement("h1");
         h1.id = "forcast";
         h1.innerText = "Forcast";
@@ -18,23 +19,43 @@ function Html(){
         let tr = document.createElement("tr");
         let th = document.createElement("th");
         let th2 = document.createElement("th");
+        let th3 = document.createElement("th");
+        let th4 = document.createElement("th");
+        let th5 = document.createElement("th");
         th.innerText = "Date Time";
         th2.innerText = "Temperature";
+        th3.innerText = "Wind speed";
+        th4.innerText = "Precipitation";
+        th5.innerText = "Cloud coverage";
+
         tr.appendChild(th);
         tr.appendChild(th2);
+        tr.appendChild(th3);
+        tr.appendChild(th4);
+        tr.appendChild(th5);
         table.appendChild(tr);
 
         if (data === undefined) {
             return;
         }
-        for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < data[0].length; i++) {
             let tr = document.createElement("tr");
             let td = document.createElement("td");
             let td2 = document.createElement("td");
-            td.innerText = data[i].getTime();
-            td2.innerText = data[i].getMax() + " " + data[i].getUnit();
+            let td3 = document.createElement("td");
+            let td4 = document.createElement("td");
+            let td5 = document.createElement("td");
+            td.innerText = data[0][i].getTime();
+            td2.innerText = data[0][i].getMax() + " " + data[0][i].getUnit();
+            td3.innerText = data[1][i].getMax() + " " + data[1][i].getUnit();
+            td4.innerText = data[2][i].getValue() + " " + data[2][i].getUnit();
+            td5.innerText = data[3][i].getMax() + " " + data[3][i].getUnit();
+
             tr.appendChild(td);
             tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
             table.appendChild(tr);
         }
         document.getElementById("content").appendChild(table);

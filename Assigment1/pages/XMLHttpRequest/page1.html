@@ -42,7 +42,14 @@
                 <option value="miles-per-hour">Miles per Hour (mph)</option>
             </optgroup>
         </select>
+        <select id="precipitation-unit" name="precipitation-unit">
+            <optgroup label="precipitation Units">
+                <option value="inch">Inch</option>
+                <option value="milimeter">Millimeter</option>
+            </optgroup>
+        </select>
         <input type="submit" value="Submit">
+
     </form>
 </div>
 
@@ -59,6 +66,7 @@
     let placeF;
     let temperatureUnitF;
     let windSpeedUnitF;
+    let precipitationUnitF;
 
 
     document.querySelector("form").addEventListener("submit", function (event) {
@@ -66,6 +74,7 @@
         placeF = document.getElementById("place").value;
         temperatureUnitF = document.getElementById("temperature-unit").value;
         windSpeedUnitF = document.getElementById("wind-speed-unit").value;
+        precipitationUnitF = document.getElementById("precipitation-unit").value;
 
         place = cityService.get(placeF);
         request.requestData(place)
@@ -85,9 +94,19 @@
     function forecastCallback(data) {
         let converted = converter.convertToForcastData(data, place)
         if(temperatureUnitF === "fahrenheit"){
-           converted.forEach(function (item) {
+           converted[0].forEach(function (item) {
                item.convertToF();
            })
+        }
+        if (windSpeedUnitF === "miles-per-hour") {
+            converted[1].forEach(function (item) {
+              item.convertToMPH();
+            });
+        }
+        if (precipitationUnitF === "inch") {
+            converted[2].forEach(function (item) {
+                item.convertToInches();
+            });
         }
         html.createForcastTable(converted)
     }

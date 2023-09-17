@@ -78,6 +78,47 @@ function TemperaturePrediction(time, place, type, unit, min, max) {
     return {convertToF, convertToC,  ...weatherPrediction, getUnit: () => unit, getMin: () => min, getMax: () => max};
 }
 
+function WindPrediction(time, place, type, unit, min, max, expectedDirections) {
+    let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
+
+    function getExpectedDirections() {
+        return expectedDirections;
+    }
+
+    function matches(data) {
+        return data.getType() === type && data.getUnit() === unit && data.getValue() >= min && data.getValue() <= max && data.getTime() === time && data.getPlace() === place && expectedDirections.includes(data.getDirection());
+    }
+
+    function convertToMPH() {
+        if (unit.includes("s")) {
+            unit = "mph";
+            min = (min * 2.237).toFixed(3);
+            max = (max * 2.237).toFixed(3);
+        }
+        return this;
+    }
+
+    function convertToMS() {
+        if (unit.includes("P")) {
+            unit = "m/s";
+            min = (min / 2.237).toFixed(3);
+            max = (max / 2.237).toFixed(3);
+        }
+        return this;
+    }
+    return {
+        ...weatherPrediction, 
+        getExpectedDirections, 
+        matches, 
+        convertToMPH, 
+        convertToMS, 
+        getUnit: function() { return unit; }, 
+        getMin: function() { return min; }, 
+        getMax: function() { return max; }
+    };
+}
+
+
 function PrecipitationPrediction(time, place, value, type, unit, precipitationTypes) {
     let weatherData = WeatherData(time, place, value, type, unit);
 
@@ -90,7 +131,7 @@ function PrecipitationPrediction(time, place, value, type, unit, precipitationTy
     }
 
     function convertToInches() {
-        if (unit === "MM") {
+        if (unit === "mm") {
             unit = "Inches";
             value = value / 25.4;
         }
@@ -98,7 +139,7 @@ function PrecipitationPrediction(time, place, value, type, unit, precipitationTy
 
     function convertToMM() {
         if (unit === "Inches") {
-            unit = "MM";
+            unit = "mm";
             value = value * 25.4;
         }
     }
@@ -113,36 +154,6 @@ function PrecipitationPrediction(time, place, value, type, unit, precipitationTy
     };
 }
 
-function WindPrediction(time, place, type, unit, min, max, expectedDirections) {
-    let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
-
-    function getExpectedDirections() {
-        return expectedDirections;
-    }
-
-    function matches(data) {
-        return data.getType() === type && data.getUnit() === unit && data.getValue() >= min && data.getValue() <= max && data.getTime() === time && data.getPlace() === place && expectedDirections.includes(data.getDirection());
-    }
-
-    function convertToMPH() {
-        if (this.unit === "MS") {
-            this.unit = "MPH";
-            this.min = this.min * 2.23694;
-            this.max = this.max * 2.23694;
-        }
-    }
-
-    function convertToMS() {
-        if (this.unit === "MPH") {
-            this.unit = "MS";
-            this.min = this.min / 2.23694;
-            this.max = this.max / 2.23694;
-        }
-    }
-
-    return {getExpectedDirections, matches, convertToMPH, convertToMS, ...weatherPrediction};
-}
-
 function CloudCoveragePrediction(time, place, type, unit, min, max) {
     let weatherPrediction = WeatherPrediction(time, place, type, unit, min, max);
     return {...weatherPrediction};
@@ -153,10 +164,8 @@ function Temperature(time, place, value, type, unit) {
 
     function convertToF() {
         if (unit.includes("C")) {
-            // console.log(this.getValue())
             unit = "F";
             value = value * 1.8 + 32;
-            // console.log(this.getValue())
         }
         return this;
     }
@@ -213,7 +222,7 @@ function Wind(time, place, value, type, unit, direction) {
 
     function convertToMPH() {
         if (unit.includes("s")) {
-            unit = "MPH";
+            unit = "mph";
             value = (value * 2.237).toFixed(3);
         }
         return this;
@@ -221,7 +230,7 @@ function Wind(time, place, value, type, unit, direction) {
 
     function convertToMS() {
         if (unit.includes("p")) {
-            unit = "MS";
+            unit = "m/s";
             value = (value / 2.237).toFixed(3);
         }
         return this;
