@@ -1,5 +1,3 @@
-
-
 export type Generator<T> = { next: () => T }
 
 export type Position = {
@@ -27,7 +25,7 @@ export type Effect<T> = {
     kind: string,
     match: Match<T>
 };
-;
+
 
 export type MoveResult<T> = {
     board: Board<T>,
@@ -95,21 +93,20 @@ export function move<T>(generator: Generator<T>, board: Board<T>, first: Positio
     return result;
 }
 
-export function refill<T>(board: Board<T>, generator: Generator<T>, effects:Effect<T>[]): MoveResult<T> {
-    effects.forEach(e => {
-        e.match.positions.forEach(p => {
+export function refill<T>(board: Board<T>, generator: Generator<T>, effects: Effect<T>[]): MoveResult<T> {
+    for (let i = effects.length; i > 0; i--) {
+        if (effects[i - 1].kind === 'Refill') {
+            break;
+        }
+        effects[i - 1].match.positions.forEach(p => {
             // @ts-ignore
             board.symbols.find(s => s.position.row === p.row && s.position.col === p.col)!.symbol = '';
         });
-    });
+    }
 
-    while (board.symbols.find(s => s.symbol === '') !== undefined) {
-        let loopLimit = 500;
-        if (loopLimit === 0) {
-            break;
-        }
-        loopLimit--;
 
+    let emptyPositions = board.symbols.filter(s => s.symbol === '').map(s => s.position);
+    for (let i = 0; i < emptyPositions.length; i++) {
         let emptyPositions = board.symbols.filter(s => s.symbol === '').map(s => s.position);
         emptyPositions.forEach(p => {
             if (p.row > 0) {
@@ -125,10 +122,6 @@ export function refill<T>(board: Board<T>, generator: Generator<T>, effects:Effe
         })
     }
 
-    // if(findMatch(board) !== undefined){
-    //     return refill(board, generator, effects);
-    // }
-
     effects.push({
         kind: 'Refill',
         match:
@@ -138,6 +131,15 @@ export function refill<T>(board: Board<T>, generator: Generator<T>, effects:Effe
                 positions: []
             }
     })
+
+    let ef = findMatch(board);
+
+    if (ef[0] !== undefined) {
+        ef.forEach(e => {
+            effects.push(e);
+        })
+        return refill(board, generator, effects);
+    }
     return {board: board, effects: effects};
 }
 
