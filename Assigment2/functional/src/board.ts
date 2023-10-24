@@ -32,6 +32,7 @@ export type MoveResult<T> = {
     effects: Effect<T>[]
 }
 
+// Returns an array of positions from a given board
 export function positions(board: Board<String>) {
     let result: Position[] = [];
     for (let symbol of board.symbols) {
@@ -40,6 +41,7 @@ export function positions(board: Board<String>) {
     return result;
 }
 
+// Creates a game board with symbols generated from a generator
 export function create<T>(generator: Generator<T>, width: number, height: number): Board<T> {
     this.generator = {
         next: () => generator.next()
@@ -51,7 +53,7 @@ export function create<T>(generator: Generator<T>, width: number, height: number
     };
     return this.board;
 }
-
+// Returns the piece (symbol) at a given position on the board
 export function piece<T>(board: Board<T>, p: Position): T | undefined {
     return board.symbols.find(s => s.position.row === p.row && s.position.col === p.col)?.symbol;
 }
@@ -61,11 +63,14 @@ export function canMove<T>(board: Board<T>, first: Position, second: Position): 
     let l2 = piece(board, second);
     let outOfBounds = l1 === undefined || l2 === undefined;
 
+    //checks if symbols are not the same locations
     let diffRowColumn = first.row !== second.row && first.col !== second.col;
 
     if (outOfBounds || diffRowColumn) {
         return false;
     }
+
+    //checks if symbols are adjacent
     return checkVerticalMatch(board, first, second) || checkVerticalMatch(board, second, first)
         || checkHorizontalMatch(board, first, second) || checkHorizontalMatch(board, second, first);
 
@@ -84,6 +89,7 @@ export function move<T>(generator: Generator<T>, board: Board<T>, first: Positio
         //find matches
         effects = findMatch(board);
 
+        //refills match and more
         let refillResult = refill(board, generator, effects);
 
         result.board = refillResult.board;
@@ -94,6 +100,8 @@ export function move<T>(generator: Generator<T>, board: Board<T>, first: Positio
 }
 
 export function refill<T>(board: Board<T>, generator: Generator<T>, effects: Effect<T>[]): MoveResult<T> {
+
+    //removes matched symbols
     for (let i = effects.length; i > 0; i--) {
         if (effects[i - 1].kind === 'Refill') {
             break;
@@ -105,6 +113,7 @@ export function refill<T>(board: Board<T>, generator: Generator<T>, effects: Eff
     }
 
 
+    //moves symbols down when there is an empty space below when there is no more to move generates new
     let emptyPositions = board.symbols.filter(s => s.symbol === '').map(s => s.position);
     for (let i = 0; i < emptyPositions.length; i++) {
         let emptyPositions = board.symbols.filter(s => s.symbol === '').map(s => s.position);
@@ -134,6 +143,7 @@ export function refill<T>(board: Board<T>, generator: Generator<T>, effects: Eff
 
     let ef = findMatch(board);
 
+    //if there is more matches calls itself again
     if (ef[0] !== undefined) {
         ef.forEach(e => {
             effects.push(e);
@@ -143,7 +153,7 @@ export function refill<T>(board: Board<T>, generator: Generator<T>, effects: Eff
     return {board: board, effects: effects};
 }
 
-
+// Generates symbols
 export function generateSymbols<T>(generator: Generator<T>, width: number, height: number): Symbol<T>[] {
     let result: Symbol<T>[] = [];
     for (let row = 0; row < height; row++) {
