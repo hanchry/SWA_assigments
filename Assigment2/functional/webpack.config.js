@@ -2,7 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/init.ts',
+  entry: './src2/init.ts',
   module: {
     rules: [
       {
@@ -22,7 +22,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Match three',
-      template: 'src/index.html'
+      template: 'src2/index.html'
     }),
   ],
   output: {

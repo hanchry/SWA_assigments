@@ -1,3 +1,5 @@
+import {Symbol} from "../src2/board";
+
 export type Generator<T> = { next: () => T }
 
 export type Position = {
@@ -10,11 +12,6 @@ export type Match<T> = {
     positions: Position[]
 }
 
-export type Symbol<T> = {
-    symbol: T,
-    position: Position
-}
-
 export type Board<T> = {
     width: number,
     height: number,
@@ -25,10 +22,19 @@ export type Effect<T> = {
     kind: string,
     match: Match<T>
 };
+;
 
 export type MoveResult<T> = {
     board: Board<T>,
     effects: Effect<T>[]
+}
+
+export function positions(board: Board<String>) {
+    let result: Position[] = [];
+    for (let symbol of board.symbols) {
+        result.push(symbol.position);
+    }
+    return result;
 }
 
 export function create<T>(generator: Generator<T>, width: number, height: number): Board<T> {
@@ -59,27 +65,75 @@ export function canMove<T>(board: Board<T>, first: Position, second: Position): 
     }
     return checkVerticalMatch(board, first, second) || checkVerticalMatch(board, second, first)
         || checkHorizontalMatch(board, first, second) || checkHorizontalMatch(board, second, first);
+
 }
 
 export function move<T>(generator: Generator<T>, board: Board<T>, first: Position, second: Position): MoveResult<T> {
     let effects: Effect<T>[] = [];
+    let result = {board: board, effects: effects};
+
     if (canMove(board, first, second)) {
+        //switch letters
         let temp = piece(board, first);
         board.symbols.find(s => s.position.row === first.row && s.position.col === first.col)!.symbol = piece(board, second)!;
         board.symbols.find(s => s.position.row === second.row && s.position.col === second.col)!.symbol = temp!;
 
+        //find matches
         effects = findMatch(board);
 
-        let positions:Position[] = [];
-        effects.forEach(e => {
-            e.match.positions.forEach(p => {
-                positions.push(p);
-            });
-        });
-        board = match( generator,board, positions);
+        let refillResult = refill(board, generator, effects);
+
+        result.board = refillResult.board;
+        result.effects = refillResult.effects;
     }
+
+    return result;
+}
+
+export function refill<T>(board: Board<T>, generator: Generator<T>, effects:Effect<T>[]): MoveResult<T> {
+    effects.forEach(e => {
+        e.match.positions.forEach(p => {
+            board.symbols.find(s => s.position.row === p.row && s.position.col === p.col)!.symbol = '';
+        });
+    });
+
+    while (board.symbols.find(s => s.symbol === '') !== undefined) {
+        let loopLimit = 500;
+        if (loopLimit === 0) {
+            break;
+        }
+        loopLimit--;
+
+        let emptyPositions = board.symbols.filter(s => s.symbol === '').map(s => s.position);
+        emptyPositions.forEach(p => {
+            if (p.row > 0) {
+                let symbol = piece(board, {row: p.row - 1, col: p.col});
+                if (symbol !== undefined) {
+                    board.symbols.find(s => s.position.row === p.row && s.position.col === p.col)!.symbol = symbol!;
+                    board.symbols.find(s => s.position.row === p.row - 1 && s.position.col === p.col)!.symbol = '';
+                }
+            } else {
+                board.symbols.find(s => s.position.row === p.row && s.position.col === p.col)!.symbol = generator.next();
+            }
+        })
+    }
+
+    // if(findMatch(board) !== undefined){
+    //     return refill(board, generator, effects);
+    // }
+
+    effects.push({
+        kind: 'Refill',
+        match:
+            {
+                // @ts-ignore
+                matched: '',
+                positions: []
+            }
+    })
     return {board: board, effects: effects};
 }
+
 
 export function generateSymbols<T>(generator: Generator<T>, width: number, height: number): Symbol<T>[] {
     let result: Symbol<T>[] = [];
@@ -197,9 +251,9 @@ export function findMatch<T>(board: Board<T>): Effect<T>[] {
     return results;
 }
 
-export function match<T>(generator: Generator<T>, board: Board<T>, positions:Position[]): Board<T> {
+export function match<T>(generator: Generator<T>, board: Board<T>, positions: Position[]): Board<T> {
     for (let symbol of board.symbols) {
-        if(positions.some(p => p.row === symbol.position.row && p.col === symbol.position.col)){
+        if (positions.some(p => p.row === symbol.position.row && p.col === symbol.position.col)) {
             symbol.symbol = generator.next();
         }
     }
@@ -209,31 +263,4 @@ export function match<T>(generator: Generator<T>, board: Board<T>, positions:Pos
     }
     return board;
 }
-export function remove<T>(board: Board<T>, positions:Position[]): Board<T> {
-    for (let symbol of board.symbols) {
-        if(positions.some(p => p.row === symbol.position.row && p.col === symbol.position.col)){
-            symbol.symbol = undefined;
-        }
-    }
-    board = drop(board);
-    return board;
-}
-export function drop<T>(board:Board<T>): Board<T>{
 
-    for(let i = 0; i < board.symbols.length; i++){
-        if(board.symbols[i].symbol === undefined){
-            let row = board.symbols[i].position.row;
-            let col = board.symbols[i].position.col;
-            let nextRow = row - 1;
-            let nextCol = col;
-            if(nextRow < 0) {
-                let next = board.symbols.find(s => s.position.row === nextRow && s.position.col === nextCol);
-                board.symbols[i].symbol = next?.symbol;
-            }
-        }
-    }
-    if(board.symbols.some(s => s.symbol === undefined)){
-        return drop(board);
-    }
-    return board;
-}
