@@ -270,16 +270,16 @@ export function move<T>(generator: Generator<T>, board: Board<T>, first: Positio
     return results;
 }
 
- function match<T>(generator: Generator<T>, board: Board<T>, positions: Position[]): Board<T> {
-    for (let symbol of board.symbols) {
-        if (positions.some(p => p.row === symbol.position.row && p.col === symbol.position.col)) {
-            symbol.symbol = generator.next();
-        }
-    }
-    let effect = findMatch(board)
-    if (effect.length > 0) {
-        return match(generator, board, positions);
-    }
-    return board;
-}
-
+//  function match<T>(generator: Generator<T>, board: Board<T>, positions: Position[]): Board<T> {
+//     for (let symbol of board.symbols) {
+//         if (positions.some(p => p.row === symbol.position.row && p.col === symbol.position.col)) {
+//             symbol.symbol = generator.next();
+//         }
+//     }
+//     let effect = findMatch(board)
+//     if (effect.length > 0) {
+//         return match(generator, board, positions);
+//     }
+//     return board;
+// }
+//
