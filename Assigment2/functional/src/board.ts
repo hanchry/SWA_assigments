@@ -1,4 +1,4 @@
-import {Symbol} from "../src2/board";
+
 
 export type Generator<T> = { next: () => T }
 
@@ -17,6 +17,11 @@ export type Board<T> = {
     height: number,
     symbols: Symbol<T>[]
 };
+
+export type Symbol<T> = {
+    symbol: T,
+    position: Position
+}
 
 export type Effect<T> = {
     kind: string,
@@ -93,6 +98,7 @@ export function move<T>(generator: Generator<T>, board: Board<T>, first: Positio
 export function refill<T>(board: Board<T>, generator: Generator<T>, effects:Effect<T>[]): MoveResult<T> {
     effects.forEach(e => {
         e.match.positions.forEach(p => {
+            // @ts-ignore
             board.symbols.find(s => s.position.row === p.row && s.position.col === p.col)!.symbol = '';
         });
     });
@@ -110,6 +116,7 @@ export function refill<T>(board: Board<T>, generator: Generator<T>, effects:Effe
                 let symbol = piece(board, {row: p.row - 1, col: p.col});
                 if (symbol !== undefined) {
                     board.symbols.find(s => s.position.row === p.row && s.position.col === p.col)!.symbol = symbol!;
+                    // @ts-ignore
                     board.symbols.find(s => s.position.row === p.row - 1 && s.position.col === p.col)!.symbol = '';
                 }
             } else {
