@@ -99,7 +99,7 @@ export function move<T>(generator: Generator<T>, board: Board<T>, first: Positio
     return result;
 }
 
-export function refill<T>(board: Board<T>, generator: Generator<T>, effects: Effect<T>[]): MoveResult<T> {
+ function refill<T>(board: Board<T>, generator: Generator<T>, effects: Effect<T>[]): MoveResult<T> {
 
     //removes matched symbols
     for (let i = effects.length; i > 0; i--) {
@@ -154,7 +154,7 @@ export function refill<T>(board: Board<T>, generator: Generator<T>, effects: Eff
 }
 
 // Generates symbols
-export function generateSymbols<T>(generator: Generator<T>, width: number, height: number): Symbol<T>[] {
+ function generateSymbols<T>(generator: Generator<T>, width: number, height: number): Symbol<T>[] {
     let result: Symbol<T>[] = [];
     for (let row = 0; row < height; row++) {
         for (let col = 0; col < width; col++) {
@@ -168,7 +168,7 @@ export function generateSymbols<T>(generator: Generator<T>, width: number, heigh
 }
 
 
-export function checkVerticalMatch<T>(board: Board<T>, position: Position, target: Position): boolean {
+ function checkVerticalMatch<T>(board: Board<T>, position: Position, target: Position): boolean {
     let letter = piece(board, position);
     let arround = [
         {row: target.row - 1, col: target.col},
@@ -201,7 +201,7 @@ export function checkVerticalMatch<T>(board: Board<T>, position: Position, targe
     return false;
 }
 
-export function checkHorizontalMatch<T>(board: Board<T>, position: Position, target: Position): boolean {
+ function checkHorizontalMatch<T>(board: Board<T>, position: Position, target: Position): boolean {
     let letter = piece(board, position);
     let arround = [
         {row: target.row, col: target.col - 1},
@@ -234,7 +234,7 @@ export function checkHorizontalMatch<T>(board: Board<T>, position: Position, tar
     return false;
 }
 
-export function findMatch<T>(board: Board<T>): Effect<T>[] {
+ function findMatch<T>(board: Board<T>): Effect<T>[] {
     let results: Effect<T>[] = [];
     for (let symbol of board.symbols) {
         let position = symbol.position;
@@ -270,7 +270,7 @@ export function findMatch<T>(board: Board<T>): Effect<T>[] {
     return results;
 }
 
-export function match<T>(generator: Generator<T>, board: Board<T>, positions: Position[]): Board<T> {
+ function match<T>(generator: Generator<T>, board: Board<T>, positions: Position[]): Board<T> {
     for (let symbol of board.symbols) {
         if (positions.some(p => p.row === symbol.position.row && p.col === symbol.position.col)) {
             symbol.symbol = generator.next();
