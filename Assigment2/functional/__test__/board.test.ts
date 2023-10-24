@@ -52,8 +52,8 @@ class GeneratorFake<T> implements Generator<T> {
 
 describe("Board", () => {
     describe("Initial board", () => {
-        const generator = new CyclicGenerator('ABC')
-        const board = Board.create(generator, 2, 3)
+        let generator = new CyclicGenerator('ABC')
+        let board = Board.create(generator, 2, 3)
 
         it("has the given width", () => {
             expect(board.width).toEqual(2)
