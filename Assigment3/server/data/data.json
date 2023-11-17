@@ -10,7 +10,7 @@
       "username": "andrej",
       "password": "none",
       "id": 1,
-      "admin": false
+      "admin": true
     }
   ],
   "games": []
