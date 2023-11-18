@@ -1,4 +1,56 @@
 .App {
 
 }
+/*make basic var colors*/
+:root{
+    --primary-color: #282c34;
+    --secondary-color: #54bcd7;
+    --text-color: white;
+    --text-color-secondary: black;
+    --error-color: red;
+    --transition-default: 0.2s ease;
+}
+
+.error-hidden{
+    display: none;
+    color: var(--error-color);
+}
+
+nav{
+    background-color: var(--primary-color);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav > ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+nav > ul > li {
+    margin: 0px;
+}
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: var(--transition-default);
+}
+.nav-link:hover {
+    color: var(--secondary-color);
+}
+.nav-button {
+    background-color: var(--secondary-color);
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    color: var(--text-color);
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition-default);
+}
+.nav-button:hover {
+    background-color: white;
+    color: var(--primary-color);
+}
 

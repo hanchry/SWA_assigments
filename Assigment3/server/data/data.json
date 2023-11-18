@@ -11,6 +11,13 @@
       "password": "none",
       "id": 1,
       "admin": true
+    },
+    {
+      "id": 2,
+      "username": "asd",
+      "password": "asd",
+      "token": "",
+      "admin": false
     }
   ],
   "games": []

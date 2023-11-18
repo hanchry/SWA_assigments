@@ -3,22 +3,22 @@ import {useDispatch} from 'react-redux';
 import { login } from "../state/actions/AuthActions";
 import {User} from "../types/User";
 import { useNavigate } from 'react-router-dom';
-import {LoginEnums} from "../state/enums/LoginEnums";
+import {AuthEnums} from "../state/enums/AuthEnums";
 
-import './styles/Login.css';
 
+const initialUser: User = {
+    id: 0,
+    username: '',
+    password: '',
+    token: '',
+    admin: false
+}
 
 const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState<User>({
-        id: 0,
-        username: '',
-        password: '',
-        token: '',
-        admin: false
-    });
+    const [formData, setFormData] = useState(initialUser);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -28,8 +28,7 @@ const Login = () => {
     const handleLogin = async () => {
         const result = await dispatch(login(formData) as any);
 
-        console.log(result.type)
-        if(result.type === LoginEnums.LOGIN_SUCCESS){
+        if(result.type === AuthEnums.LOGIN_SUCCESS){
             navigate('/home')
         }
         else {
@@ -46,7 +45,7 @@ const Login = () => {
 
     return (
         <div>
-            <h1>Login Page</h1>
+            <h1>Login</h1>
             <form>
                 <div>
                     <label htmlFor="username">Username:</label>
