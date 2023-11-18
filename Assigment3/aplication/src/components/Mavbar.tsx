@@ -10,7 +10,7 @@ function Navbar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const auth = useSelector((state: { authReducer: LoginState }) => state.authReducer.isAuthenticated);
-    const token = useSelector((state:{ authReducer: LoginState }) => state.authReducer.user?.token);
+    const token = useSelector((state:{ authReducer: LoginState }) => state.authReducer.token);
     const handleLogout = async () => {
         if(token === undefined) return;
 

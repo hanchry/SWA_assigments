@@ -3,12 +3,14 @@ import {User} from "../../types/User";
 
 export interface LoginState {
     isAuthenticated: boolean;
-    user: User | null;
+    userId?: number;
+    token?: string;
 }
 
 const initialState: LoginState = {
     isAuthenticated: false,
-    user: null,
+    userId: undefined,
+    token: undefined,
 };
 
 const authReducer = (state: LoginState = initialState, action: any) => {
@@ -22,7 +24,8 @@ const authReducer = (state: LoginState = initialState, action: any) => {
             return {
                 ...state,
                 isAuthenticated: true,
-                user: action.payload,
+                userId: action.payload.userId,
+                token: action.payload.token,
             };
         case AuthEnums.LOGIN_FAILURE:
             return {
@@ -38,7 +41,8 @@ const authReducer = (state: LoginState = initialState, action: any) => {
             return {
                 ...state,
                 isAuthenticated: false,
-                user: null,
+                userId: null,
+                token: null,
             }
         case AuthEnums.LOGOUT_FAILURE:
             return {
@@ -54,7 +58,8 @@ const authReducer = (state: LoginState = initialState, action: any) => {
             return {
                 ...state,
                 isAuthenticated: true,
-                user: action.payload,
+                userId: action.payload.userId,
+                token: action.payload.token,
             }
         case AuthEnums.REGISTER_FAILURE:
             return {

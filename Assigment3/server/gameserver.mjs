@@ -118,8 +118,9 @@ app.post('/users', (req, res) => {
 app.get('/users/:id', (req, res) => {
   withSession(req, res, user => {
     const id = parseInt(req.params.id)
-    if (user.id === id || user.admin)
+    if (user.id === id || user.admin) {
       res.send(db.user(id))
+    }
     else
       res.sendStatus(403)
   })

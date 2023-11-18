@@ -2,10 +2,9 @@ import {User} from "../../types/User";
 import axios from "axios";
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-// Action types
+
 import {AuthEnums} from "../enums/AuthEnums";
-import {useSelector} from "react-redux";
-import {LoginState} from "../reducers/AuthReducer";
+
 
 export const loginRequest = () => ({
     type: AuthEnums.LOGIN_REQUEST,

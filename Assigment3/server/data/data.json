@@ -20,5 +20,11 @@
       "admin": false
     }
   ],
-  "games": []
+  "games": [
+    {
+      "id": 0,
+      "username": "andrej",
+      "score": 100
+    }
+  ]
 }
