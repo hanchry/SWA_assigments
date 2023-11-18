@@ -1,44 +1,33 @@
-import {LoginEnums} from "../enums/LoginEnums";
-import {User} from "../../types/User";
+import { LoginEnums } from "../enums/LoginEnums";
+import { User } from "../../types/User";
 
-interface LoginState {
-    isLoading: boolean;
+export interface LoginState {
     isAuthenticated: boolean;
     user: User | null;
-    error: string | null;
 }
 
 const initialState: LoginState = {
-    isLoading: false,
     isAuthenticated: false,
     user: null,
-    error: null,
 };
 
-const loginReducer = (state = initialState, action: any) => {
+const loginReducer = (state: LoginState = initialState, action: any) => {
     switch (action.type) {
         case LoginEnums.LOGIN_REQUEST:
             return {
                 ...state,
-                isLoading: true,
                 isAuthenticated: false,
-                error: null,
             };
         case LoginEnums.LOGIN_SUCCESS:
             return {
                 ...state,
-                isLoading: false,
                 isAuthenticated: true,
                 user: action.payload,
-                error: null,
             };
         case LoginEnums.LOGIN_FAILURE:
             return {
                 ...state,
-                isLoading: false,
                 isAuthenticated: false,
-                user: null,
-                error: action.payload,
             };
         default:
             return state;

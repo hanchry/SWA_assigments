@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import {useDispatch} from 'react-redux';
 import { login } from "../state/actions/AuthActions";
 import {User} from "../types/User";
+import { useNavigate } from 'react-router-dom';
+import {LoginEnums} from "../state/enums/LoginEnums";
 
+import './styles/Login.css';
 
 
 const Login = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState<User>({
         id: 0,
@@ -21,9 +25,24 @@ const Login = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleLogin = () => {
-        dispatch(login(formData) as any);
+    const handleLogin = async () => {
+        const result = await dispatch(login(formData) as any);
+
+        console.log(result.type)
+        if(result.type === LoginEnums.LOGIN_SUCCESS){
+            navigate('/home')
+        }
+        else {
+            const error = document.getElementById('error');
+            if(error != null) {
+                error.style.display = 'block';
+            }
+
+        }
     };
+    const handleRegister = async () => {
+        navigate('/register')
+    }
 
     return (
         <div>
@@ -52,6 +71,10 @@ const Login = () => {
                 <button type="button" onClick={handleLogin}>
                     Login
                 </button>
+                <button type="button" onClick={handleRegister}>
+                    Register
+                </button>
+                <p id='error' className="error-hidden">Incorrect username or password</p>
             </form>
         </div>
     );
