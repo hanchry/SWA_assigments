@@ -31,7 +31,7 @@ function Navbar() {
                     <Link className="nav-link" to="/home">Play</Link>
                 </li>
                 <li>
-                    <Link className="nav-link" to="/home">Best Scores</Link>
+                    <Link className="nav-link" to="/scores">Best Scores</Link>
                 </li>
                 <li>
                     <Link className="nav-link" to="/home">Profile</Link>

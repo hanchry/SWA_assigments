@@ -1,21 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './state/Store';
 import { BrowserRouter } from 'react-router-dom';
+import {createRoot} from "react-dom/client";
+import React from 'react';
 
-ReactDOM.render(
-    <Provider store={store}>
-        <React.StrictMode>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </React.StrictMode>
-    </Provider>,
-    document.getElementById('root')
-);
+const root = document.getElementById('root');
 
-reportWebVitals();
+if (root) {
+    const reactRoot = createRoot(root);
+
+    reactRoot.render(
+        <Provider store={store}>
+            <React.StrictMode>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </React.StrictMode>
+        </Provider>
+    );
+
+    reportWebVitals();
+} else {
+    console.error("Root element with id 'root' not found.");
+}
+

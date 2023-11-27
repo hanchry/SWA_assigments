@@ -1,0 +1,5 @@
+export enum ScoreEnums{
+    GET_SCORES_REQUEST = 'GET_SCORES_REQUEST',
+    GET_SCORES_SUCCESS = 'GET_SCORES_REQUEST/fulfilled',
+    GET_SCORES_FAILURE = 'GET_SCORES_REQUEST/rejected',
+}

@@ -6,6 +6,7 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import PrivateRoute from "./utils/PrivateRoute";
 import Navbar from "./components/Mavbar";
+import Score from "./components/Score";
 
 function App() {
     return (
@@ -17,7 +18,7 @@ function App() {
                 <Route element={<PrivateRoute/>}>
                     <Route path="/home" element={<Home/>}/>
                     <Route path="/play" element={<Home/>}/>
-                    <Route path="/scores" element={<Home/>}/>
+                    <Route path="/scores" element={<Score/>}/>
                 </Route>
             </Routes>
         </>
