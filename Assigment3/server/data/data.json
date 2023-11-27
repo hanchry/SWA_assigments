@@ -16,15 +16,42 @@
       "id": 2,
       "username": "asd",
       "password": "asd",
+      "token": "908cae6a17519b69fc4ff8cb7fa602dc",
+      "admin": false,
+      "": "asd"
+    },
+    {
+      "id": 3,
+      "username": "",
+      "password": "",
       "token": "",
       "admin": false
     }
   ],
   "games": [
     {
-      "id": 0,
-      "username": "andrej",
-      "score": 100
+      "user": 2,
+      "id": 1,
+      "score": 0,
+      "completed": false
+    },
+    {
+      "user": 2,
+      "id": 2,
+      "score": 2,
+      "completed": false
+    },
+    {
+      "user": 2,
+      "id": 3,
+      "score": 10,
+      "completed": false
+    },
+    {
+      "user": 2,
+      "id": 4,
+      "score": 10,
+      "completed": false
     }
   ]
 }

@@ -30,6 +30,19 @@ const userReducer = (state: UserState = initialState, action: any) => {
             return {
                 ...state,
             }
+        case UserEnums.UPDATE_USER_REQUEST:
+            return {
+                ...state,
+            }
+        case UserEnums.UPDATE_USER_SUCCESS:
+            return {
+                ...state,
+                user: action.payload,
+            }
+        case UserEnums.UPDATE_USER_FAILURE:
+            return {
+                ...state,
+            }
         default:
             return state;
 

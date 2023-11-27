@@ -25,9 +25,16 @@ function Navbar() {
 
     return (
         <nav>
-            <ul>
+            <h1 id="nav-name">Assigment 3</h1>
+            <ul id="nav-links">
                 <li>
-                    <Link className="nav-link" to="/home">Home</Link>
+                    <Link className="nav-link" to="/home">Play</Link>
+                </li>
+                <li>
+                    <Link className="nav-link" to="/home">Best Scores</Link>
+                </li>
+                <li>
+                    <Link className="nav-link" to="/home">Profile</Link>
                 </li>
             </ul>
             <button className="nav-button" onClick={handleLogout}>Logout</button>

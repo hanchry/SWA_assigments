@@ -38,3 +38,37 @@ export const getUser = createAsyncThunk(
             return thunkAPI.rejectWithValue({ error: (error as Error).message });
         }
     });
+
+export const updateUserRequest = () => ({
+    type: UserEnums.UPDATE_USER_REQUEST,
+});
+export const updateUserSuccess = (user: User) => ({
+    type: UserEnums.UPDATE_USER_SUCCESS,
+    payload: user,
+});
+export const updateUserFailure = (error: string) => ({
+    type: UserEnums.UPDATE_USER_FAILURE,
+    payload: error,
+});
+
+export const updateUser = createAsyncThunk(
+    UserEnums.UPDATE_USER_REQUEST,
+    async (user:User, thunkAPI) => {
+        thunkAPI.dispatch(updateUserRequest());
+        try {
+            const url = `http://localhost:9090/users/${user.id}?token=${user.token}`;
+            const response = await axios.patch(url, user, {
+                headers: {
+                    Accept: 'application/json',
+                },
+            });
+
+            const userResponse = response.data;
+            thunkAPI.dispatch(updateUserSuccess(userResponse));
+            return userResponse;
+        } catch (error) {
+            thunkAPI.dispatch(updateUserFailure((error as Error).message));
+            return thunkAPI.rejectWithValue({ error: (error as Error).message });
+        }
+    }
+);
