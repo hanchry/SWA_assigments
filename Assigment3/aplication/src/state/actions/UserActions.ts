@@ -20,10 +20,11 @@ export const getUserFailure = (error: string) => ({
 
 export const getUser = createAsyncThunk(
     UserEnums.GET_USER_REQUEST,
-    async (user:User, thunkAPI) => {
+    async (id:number, thunkAPI) => {
         thunkAPI.dispatch(getUserRequest());
         try {
-            const url = `http://localhost:9090/users/${user.id}?token=${user.token}`;
+            const token = getTokenFromState(thunkAPI.getState());
+            const url = `http://localhost:9090/users/${id}?token=${token}`;
             const response = await axios.get(url, {
                 headers: {
                     Accept: 'application/json',
@@ -56,7 +57,8 @@ export const updateUser = createAsyncThunk(
     async (user:User, thunkAPI) => {
         thunkAPI.dispatch(updateUserRequest());
         try {
-            const url = `http://localhost:9090/users/${user.id}?token=${user.token}`;
+            const token = getTokenFromState(thunkAPI.getState());
+            const url = `http://localhost:9090/users/${user.id}?token=${token}`;
             const response = await axios.patch(url, user, {
                 headers: {
                     Accept: 'application/json',
@@ -72,3 +74,6 @@ export const updateUser = createAsyncThunk(
         }
     }
 );
+
+
+const getTokenFromState = (state: any) => state.authReducer.token as string;

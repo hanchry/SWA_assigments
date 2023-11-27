@@ -29,7 +29,7 @@
       "completed": false
     },
     {
-      "user": 2,
+      "user": 0,
       "id": 2,
       "score": 2,
       "completed": false
@@ -41,7 +41,7 @@
       "completed": false
     },
     {
-      "user": 2,
+      "user": 1,
       "id": 4,
       "score": 10,
       "completed": false

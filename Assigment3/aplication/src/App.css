@@ -187,3 +187,47 @@ input[type="password"] {
     margin-top: 20px;
 }
 
+
+
+#best-scores {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+/* Styles for the heading */
+.score-heading {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Styles for the table */
+.score-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Styles for table headers */
+.table-header {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Styles for table rows */
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Styles for table data cells */
+table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Hover effect for table rows */
+table tr:hover {
+    background-color: #e0e0e0;
+}
+

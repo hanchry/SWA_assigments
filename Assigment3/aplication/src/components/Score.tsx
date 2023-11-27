@@ -18,22 +18,28 @@ const BestScores: React.FC = () => {
 
     const [bestScores, setBestScores] = useState<Score[]>([]);
 
+    const topTen = (scores: Score[]) => {
+        const uniqueScores = scores.reduce((unique:Score[], score:Score) => {
+            const existing = unique.find((s:Score) => s.user === score.user);
+
+            if (!existing) {
+                unique.push(score);
+            } else if (score.score > existing.score) {
+                existing.score = score.score;
+            }
+
+            return unique;
+        }, []);
+
+        const sortedScores = uniqueScores.sort((a, b) => b.score - a.score);
+
+        // Return the top 10 scores
+        return sortedScores.slice(0, 10);
+    }
     const fetchBestScores = async () => {
         const response = await dispatch(getScores() as any);
         if (response.type === ScoreEnums.GET_SCORES_SUCCESS) {
-            for (let i = 0; i < response.payload.length; i++) {
-                const userResponse = await dispatch(getUser({
-                    id: response.payload[i].user,
-                    username: "",
-                    password: "",
-                    token: token,
-                    admin: false
-                }) as any);
-                if(userResponse.type === UserEnums.GET_USER_SUCCESS) {
-                    response.payload[i].user = userResponse.payload.username;
-                }
-            }
-            setBestScores(response.payload);
+            setBestScores(topTen(response.payload));
         }
     };
 
@@ -42,15 +48,26 @@ const BestScores: React.FC = () => {
     }, []);
 
     return (
-        <div>
-            <h2>Best Scores</h2>
-            <ol>
+        <div id="best-scores">
+            <h2 className="score-heading">Best Scores</h2>
+            <table className="score-table">
+                <thead>
+                <tr>
+                    <th className="table-header">Rank</th>
+                    <th className="table-header">User</th>
+                    <th className="table-header">Score</th>
+                </tr>
+                </thead>
+                <tbody>
                 {bestScores.map((score, index) => (
-                    <li key={index}>
-                        {score.user}: {score.score}
-                    </li>
+                    <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{score.user}</td>
+                        <td>{score.score}</td>
+                    </tr>
                 ))}
-            </ol>
+                </tbody>
+            </table>
         </div>
     );
 };
