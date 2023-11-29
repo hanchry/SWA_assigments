@@ -1,4 +1,4 @@
-export type Generator<T> = { next: () => T }
+export type Generator<T> = { next: () => T };
 
 export type Position = {
     row: number,
@@ -46,13 +46,13 @@ export function positions(board: Board<String>) {
 // Creates a game board with symbols generated from a generator
 export function create<T>(generator: Generator<T>, width: number, height: number): Board<T> {
 
-    generator = {
+    const generatorNew = {
         next: () => generator.next()
     };
     const board = {
         width: width,
         height: height,
-        symbols: generateSymbols(generator, width, height)
+        symbols: generateSymbols(generatorNew, width, height)
     };
     return board;
 }
@@ -161,8 +161,9 @@ export function move<T>(generator: Generator<T>, board: Board<T>, first: Positio
     let result: Symbol<T>[] = [];
     for (let row = 0; row < height; row++) {
         for (let col = 0; col < width; col++) {
+            const symbol = generator.next();
             result.push({
-                symbol: generator.next(),
+                symbol: symbol,
                 position: {row: row, col: col}
             });
         }
