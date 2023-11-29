@@ -28,7 +28,7 @@ function Navbar() {
             <h1 id="nav-name">Assigment 3</h1>
             <ul id="nav-links">
                 <li>
-                    <Link className="nav-link" to="/home">Play</Link>
+                    <Link className="nav-link" to="/game">Play</Link>
                 </li>
                 <li>
                     <Link className="nav-link" to="/scores">Best Scores</Link>
