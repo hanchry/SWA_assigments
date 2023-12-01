@@ -3,13 +3,15 @@ import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import {CyclicGenerator} from "../game/functional/src/generator";
 import {Position} from "../game/functional/src/board";
+import GameItem from "./GameItem";
 
 const Game = () => {
+
     const dispatch = useDispatch();
     const [board, setBoard] = useState<Position[]>([]);
 
     const generator = new CyclicGenerator('ABC');
-    const newBoard = Board.create(generator, 5, 5);
+    const newBoard = Board.create(generator, 3, 3);
 
     useEffect(() => {
 
@@ -24,9 +26,15 @@ const Game = () => {
         <div>
             <h1>Game</h1>
             <div className="board">
-                {board.map((value, index, array) => (
-                    <div key={index}>
-                        <p>Value: {Board.piece(newBoard,value)}</p>
+                {[...Array(newBoard.height)].map((_, rowIndex) => (
+                    <div key={rowIndex}>
+                        {[...Array(newBoard.width)].map((_, columnIndex) => (
+                            <GameItem
+                                key={`${rowIndex}-${columnIndex}`}
+                                symbol={Board.piece(newBoard, { row: rowIndex, col: columnIndex })}
+                                position={{ row: rowIndex, col: columnIndex }}
+                            />
+                        ))}
                     </div>
                 ))}
             </div>
