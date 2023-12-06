@@ -2,7 +2,7 @@ Match 3 games are a popular pastime on mobile devices. They are simple, colourfu
 
 Here we are going to consider a simple version of a match 3 game:
 
-· The board is a rectangle consisting of individual tiles. On each tile is a piece.
+· The boardAction is a rectangle consisting of individual tiles. On each tile is a piece.
 
 · The player chooses two tiles to swap. If the move is legal (see below), the game swaps the two tiles, finds all horizontal and vertical matches of at least 3 identical tiles and removes them, causing the tiles above to drop down in their place and new random tiles to drop down from above.
 
@@ -16,11 +16,11 @@ Here we are going to consider a simple version of a match 3 game:
 
 The required code
 
-The task is to implement a board with rules like above using object-oriented and functional techniques.
+The task is to implement a boardAction with rules like above using object-oriented and functional techniques.
 
-In the object-oriented version, implement a Board class with methods to read the status of the board, allow for moving, and listen to events from the board (matches and the board refilling). Also, define some parameter and return types.
+In the object-oriented version, implement a Board class with methods to read the status of the boardAction, allow for moving, and listen to events from the boardAction (matches and the boardAction refilling). Also, define some parameter and return types.
 
-In the functional version, implement a Board type, and several functions to create the board, read the status of the board, and allow for moving. The events will be returned from the function to make a move, as functional programming doesn’t allow the concept of listening for changes.
+In the functional version, implement a Board type, and several functions to create the boardAction, read the status of the boardAction, and allow for moving. The events will be returned from the function to make a move, as functional programming doesn’t allow the concept of listening for changes.
 
 Details (Object-oriented)
 
@@ -38,7 +38,7 @@ Position is simply the position of the tile on the form {row: 2, col: 4}.
 
 Match
 
-A match represents a match found on the board. It has two properties: matched is the tile found to match, positions is an array of the positions found in this match (see below for examples).
+A match represents a match found on the boardAction. It has two properties: matched is the tile found to match, positions is an array of the positions found in this match (see below for examples).
 
 BoardEvent
 
@@ -50,15 +50,15 @@ BoardEvent is not given. It represents two kinds of events
 
 BoardListener
 
-Not given. A board listener is a function that is called when an event fires.
+Not given. A boardAction listener is a function that is called when an event fires.
 
 Board
 
-Not given. Represents the game board. Aside from the constructor, it requires 4 methods:
+Not given. Represents the game boardAction. Aside from the constructor, it requires 4 methods:
 
 · addListener – adds a listener to react to events
 
-· piece – returns the piece on the tile at the given position, or undefined if it is not a position on the board.
+· piece – returns the piece on the tile at the given position, or undefined if it is not a position on the boardAction.
 
 · canMove – returns true if swapping the tiles at the positions is legal according to the game rules. False, otherwise.
 
@@ -68,7 +68,7 @@ Examples
 
 Example 1
 
-Imagine a move has resulted in the board below, with the highlighted being the match. The match is removed, and new tiles B, A, and C appear.
+Imagine a move has resulted in the boardAction below, with the highlighted being the match. The match is removed, and new tiles B, A, and C appear.
 
 A A A
 
@@ -76,7 +76,7 @@ B A D
 
 A C D
 
-This will result in the board below
+This will result in the boardAction below
 
 B A C
 
@@ -92,7 +92,7 @@ And the events
 
 Example 2
 
-Imagine a move has resulted in the board below, with the highlighted being the match. The match is removed, and new tiles B, A, and D appear.
+Imagine a move has resulted in the boardAction below, with the highlighted being the match. The match is removed, and new tiles B, A, and D appear.
 
 A A A
 
@@ -100,7 +100,7 @@ B A D
 
 A C D
 
-This will result in the board below. The right column is a new match
+This will result in the boardAction below. The right column is a new match
 
 B A D
 
@@ -120,7 +120,7 @@ This will result in the events
 
 Example 3
 
-Imagine a move has resulted in the board below. This board has two matches, resulting in two match events.
+Imagine a move has resulted in the boardAction below. This boardAction has two matches, resulting in two match events.
 
 A A A
 
@@ -146,21 +146,21 @@ Effects
 
 Effects are the functional style’s replacement for events. As events, it comes in two versions. The Match effect is exactly like the Match event, but the Refill effect is different:
 
-· { kind: ‘Refill’, board: … } The board property holds the state of the board after the refill as there is no other place to access this information.
+· { kind: ‘Refill’, boardAction: … } The boardAction property holds the state of the boardAction after the refill as there is no other place to access this information.
 
 MoveResult
 
-MoveResult is the outcome of performing the move. It holds the value of the final, updated board and an array of effects corresponding to the events from the OO solution.
+MoveResult is the outcome of performing the move. It holds the value of the final, updated boardAction and an array of effects corresponding to the events from the OO solution.
 
 Board
 
-Board is now just a type (not given), which is supplemented by five functions: A factory function and one for each method of the class. The methods now take board as a parameter. In addition, the move() function takes a generator and returns a MoveResult.
+Board is now just a type (not given), which is supplemented by five functions: A factory function and one for each method of the class. The methods now take boardAction as a parameter. In addition, the move() function takes a generator and returns a MoveResult.
 
 The template
 
-The file template.zip contains two projects: oo and functional. Both projects have a main code template in src/board.ts and a test suite (using Jest) in __test__/board.test.ts. The tests can be run using npm test (remember to npm install).
+The file template.zip contains two projects: oo and functional. Both projects have a main code template in src/boardAction.ts and a test suite (using Jest) in __test__/boardAction.test.ts. The tests can be run using npm test (remember to npm install).
 
-Write the remaining code in src/board.ts while running the tests to see how you are progressing.
+Write the remaining code in src/boardAction.ts while running the tests to see how you are progressing.
 
 The hand-in
 
