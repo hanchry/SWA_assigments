@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import {movePiece} from "../state/actions/BoardAction";
 
 
-const GameItem = (data:any) => {
+const GameItem = (data: any) => {
     const dispatch = useDispatch();
 
     const props = {
@@ -13,13 +13,19 @@ const GameItem = (data:any) => {
         position: data.position,
     }
 
-    let widthDevider = 2 + ((data.gameBoard.width-1) * 0.1);
-    let heightDevider = 2 + ((data.gameBoard.height-1) * 0.1);
+    let widthDevider = 2 + ((data.gameBoard.width - 1) * 0.1);
+    let heightDevider = 2 + ((data.gameBoard.height - 1) * 0.1);
 
     const spacing = 60;
 
-    const [pos, setPos] = useState({ row:(props.position.row * spacing) + window.innerHeight/heightDevider, col:(props.position.col * spacing) + window.innerWidth/widthDevider});
-    const [lastPos, setLastPos] = useState({ row:(props.position.row * spacing) + window.innerHeight/heightDevider, col:(props.position.col * spacing) + window.innerWidth/widthDevider} );
+    const [pos, setPos] = useState({
+        row: (props.position.row * spacing) + window.innerHeight / heightDevider,
+        col: (props.position.col * spacing) + window.innerWidth / widthDevider
+    });
+    const [lastPos, setLastPos] = useState({
+        row: (props.position.row * spacing) + window.innerHeight / heightDevider,
+        col: (props.position.col * spacing) + window.innerWidth / widthDevider
+    });
 
     const [clicked, setClicked] = useState(false);
     const [initialX, setInitialX] = useState(0);
@@ -27,7 +33,7 @@ const GameItem = (data:any) => {
     const itemRef = useRef(null);
 
 
-    const handleMouseDown = (e:any) => {
+    const handleMouseDown = (e: any) => {
         e.preventDefault();
         setClicked(true);
         setInitialX(e.clientX - 10);
@@ -35,23 +41,22 @@ const GameItem = (data:any) => {
         document.addEventListener('mouseup', handleMouseUp)
     };
 
-    const handleMouseMove = (e:any) => {
+    const handleMouseMove = (e: any) => {
         if (!clicked) return;
 
-        const mewX = e.clientX -10 ;
-        const mewY = e.clientY -10 ;
+        const mewX = e.clientX - 10;
+        const mewY = e.clientY - 10;
 
-        if((initialX < mewX - 5 || initialX > mewX + 5)){
-            setPos({ row: pos.row, col: mewX})
-        }
-        else{
-            setPos({ row: mewY, col: pos.col})
+        if ((initialX < mewX - 5 || initialX > mewX + 5)) {
+            setPos({row: pos.row, col: mewX})
+        } else {
+            setPos({row: mewY, col: pos.col})
         }
 
     };
 
     const handleMouseUp = () => {
-        if(!clicked) return;
+        if (!clicked) return;
 
         move();
 
@@ -60,52 +65,52 @@ const GameItem = (data:any) => {
     };
 
     const move = () => {
-        let from:Position = { row: 0, col: 0 };
-        let to:Position = { row: 0, col: 0 };
-        if ( pos.col - initialX > spacing/3) {
-            from = { row: props.position.row, col: props.position.col };
-            to = { row: props.position.row, col: props.position.col + 1};
-        }
-        else if ( initialX - pos.col > spacing/3) {
-            from = { row: props.position.row, col: props.position.col };
-            to = { row: props.position.row, col: props.position.col - 1};
-        }
-        else if ( pos.row - initialY > spacing/3) {
-            from = { row: props.position.row, col: props.position.col };
-            to = { row: props.position.row + 1, col: props.position.col};
-        }
-        else if ( initialY - pos.row > spacing/3) {
-            from = { row: props.position.row, col: props.position.col };
-            to = { row: props.position.row - 1, col: props.position.col};
-        }
-        else {
+        let from: Position = {row: 0, col: 0};
+        let to: Position = {row: 0, col: 0};
+        if (pos.col - initialX > spacing / 3) {
+            from = {row: props.position.row, col: props.position.col};
+            to = {row: props.position.row, col: props.position.col + 1};
+        } else if (initialX - pos.col > spacing / 3) {
+            from = {row: props.position.row, col: props.position.col};
+            to = {row: props.position.row, col: props.position.col - 1};
+        } else if (pos.row - initialY > spacing / 3) {
+            from = {row: props.position.row, col: props.position.col};
+            to = {row: props.position.row + 1, col: props.position.col};
+        } else if (initialY - pos.row > spacing / 3) {
+            from = {row: props.position.row, col: props.position.col};
+            to = {row: props.position.row - 1, col: props.position.col};
+        } else {
             setPos(lastPos)
             return;
         }
 
-        const result = dispatch(movePiece(from, to,) as any)
+        const result = movePiece(from, to)
 
-        if(result.type === "Move_Piece_Success"){
-            let element1 = document.getElementById(`${to.row}-${to.col}`);
-            let element2 = document.getElementById(`${from.row}-${from.col}`);
 
-            if (element1 && element2) {
-                element2.id = `${to.row}-${to.col}`;
-                element1.id = `${from.row}-${from.col}`;
+        let element1 = document.getElementById(`${to.row}-${to.col}`);
+        let element2 = document.getElementById(`${from.row}-${from.col}`);
 
-                const newX = element1.style.left;
-                const newY = element1.style.top;
-                newX.replace('px', '');
-                newY.replace('px', '');
+        if (element1 && element2) {
+            element2.id = `${to.row}-${to.col}`;
+            element1.id = `${from.row}-${from.col}`;
 
-                element1.style.left = lastPos.col + 'px';
-                element1.style.top = lastPos.row + 'px';
 
-                setPos({ row: parseInt(newY), col: parseInt(newX) })
+            if (result.type === "Move_Piece_Success") {
+                // element2.innerText = element1.innerText;
+                // element1.innerText = props.symbol;
 
-                console.log(result.payload)
-                data.refreshCallback();
+                setPos(lastPos)
+
+                //
+                setTimeout(() => {
+                    data.refreshCallback(result.payload);
+                    data.increaseScore();
+                }, 1);
             }
+            else {
+                data.decreaseScore();
+            }
+
         }
     };
 
