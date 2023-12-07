@@ -1,14 +1,14 @@
 import * as Board from "../game/functional/src/board";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import GameItem from "./GameItem";
 import {createBoard} from "../state/actions/BoardAction";
 import {Position} from "../game/functional/src/board";
-
+import {postScore} from "../state/actions/ScoreActions";
+import {Score} from "../types/Score";
 
 const Game = () => {
     const dispatch = useDispatch();
-    const [score, setScore] = useState(0);
     const [newBoard, setNewBoard] = useState(
         useSelector((state: any) => state.boardReducer.board)
     );
@@ -17,25 +17,51 @@ const Game = () => {
         setNewBoard(updatedBoard);
     };
 
+    const [score, setScore] = useState(0);
+    const scoreRef = useRef(score);
+
     const increaseScore = () => {
-        setScore(score + 1);
+        setScore((prevScore) => {
+            const newScore = prevScore + 1;
+            scoreRef.current = newScore;
+            return newScore;
+        });
     };
 
     const decreaseScore = () => {
-        setScore(score - 1);
+        setScore((prevScore) => {
+            const newScore = prevScore - 1;
+            scoreRef.current = newScore;
+            return newScore;
+        });
     };
 
     useEffect(() => {
         if (!newBoard || newBoard.width === 0) {
-            // Wrap the dispatch call in a Promise
             new Promise((resolve) => {
                 resolve(dispatch(createBoard(3)));
             }).then((response: any) => {
                 updateNewBoard(response.payload);
-                setScore(0);
             });
         }
+
+        return () => {
+            if (scoreRef.current > 0) {
+                saveScore();
+            }
+        };
     }, [dispatch, newBoard]);
+
+    const saveScore = async () => {
+
+        const value: Score = {
+            id: 5,
+            userId: 0,
+            score: scoreRef.current,
+        }
+        await dispatch(postScore(value) as any);
+
+    }
 
     if (!newBoard || newBoard.width === 0) {
         return <div>Loading...</div>;
@@ -51,8 +77,8 @@ const Game = () => {
                             <div key={columnIndex}>
                                 <GameItem
                                     key={`${rowIndex}-${columnIndex}`}
-                                    symbol={Board.piece(newBoard, { row: rowIndex, col: columnIndex })}
-                                    position={{ row: rowIndex, col: columnIndex }}
+                                    symbol={Board.piece(newBoard, {row: rowIndex, col: columnIndex})}
+                                    position={{row: rowIndex, col: columnIndex}}
                                     gameBoard={newBoard}
                                     refreshCallback={updateNewBoard}
                                     increaseScore={increaseScore}

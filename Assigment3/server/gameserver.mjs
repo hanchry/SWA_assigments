@@ -46,8 +46,8 @@ const createDb = low => {
 
   const games = () => data.games
   const game = id => data.games.find(g => g.id === id)
-  const createGame = user => {
-    const game = { user: user.id, id: data.games.length + 1, score: 0, completed: false }
+  const createGame = req => {
+    const game = { user: req.user, id: data.games.length + 1, score: req.score, completed: req.completed }
     data.games.push(game)
     low.write()
     return game
@@ -145,7 +145,7 @@ app.get('/games', (req, res) => {
 app.post('/games', (req, res) => {
   withSession(req, res, user => {
     res.status(201)
-    res.send(db.createGame(user))
+    res.send(db.createGame(req.body))
   })
 })
 

@@ -23,12 +23,6 @@
   ],
   "games": [
     {
-      "user": 2,
-      "id": 1,
-      "score": 0,
-      "completed": false
-    },
-    {
       "user": 0,
       "id": 2,
       "score": 2,
@@ -44,6 +38,12 @@
       "user": 1,
       "id": 4,
       "score": 10,
+      "completed": false
+    },
+    {
+      "user": 2,
+      "id": 4,
+      "score": 4,
       "completed": false
     }
   ]

@@ -19,21 +19,21 @@ const BestScores: React.FC = () => {
     const [bestScores, setBestScores] = useState<Score[]>([]);
 
     const topTen = (scores: Score[]) => {
-        const uniqueScores = scores.reduce((unique:Score[], score:Score) => {
-            const existing = unique.find((s:Score) => s.user === score.user);
+        // const uniqueScores = scores.reduce((unique:Score[], score:Score) => {
+        //     const existing = unique.find((s:Score) => s.user === score.user);
+        //
+        //     if (!existing) {
+        //         unique.push(score);
+        //     } else if (score.score > existing.score) {
+        //         existing.score = score.score;
+        //     }
+        //
+        //     return unique;
+        // }, []);
+        console.log(scores);
 
-            if (!existing) {
-                unique.push(score);
-            } else if (score.score > existing.score) {
-                existing.score = score.score;
-            }
+        const sortedScores = scores.sort((a, b) => b.score - a.score);
 
-            return unique;
-        }, []);
-
-        const sortedScores = uniqueScores.sort((a, b) => b.score - a.score);
-
-        // Return the top 10 scores
         return sortedScores.slice(0, 10);
     }
     const fetchBestScores = async () => {
