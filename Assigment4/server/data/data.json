@@ -1,0 +1,50 @@
+{
+  "users": [
+    {
+      "username": "admin",
+      "password": "secret",
+      "id": 0,
+      "admin": true
+    },
+    {
+      "username": "andrej",
+      "password": "none",
+      "id": 1,
+      "admin": true
+    },
+    {
+      "id": 2,
+      "username": "asd",
+      "password": "asd",
+      "token": "908cae6a17519b69fc4ff8cb7fa602dc",
+      "admin": false,
+      "": "asd"
+    }
+  ],
+  "games": [
+    {
+      "user": 0,
+      "id": 2,
+      "score": 2,
+      "completed": false
+    },
+    {
+      "user": 2,
+      "id": 3,
+      "score": 10,
+      "completed": false
+    },
+    {
+      "user": 1,
+      "id": 4,
+      "score": 10,
+      "completed": false
+    },
+    {
+      "user": 2,
+      "id": 4,
+      "score": 4,
+      "completed": false
+    }
+  ]
+}
