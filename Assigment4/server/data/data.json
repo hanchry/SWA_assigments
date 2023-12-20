@@ -20,6 +20,92 @@
     }
   ],
   "games": [
-    
+    {
+      "user": 2,
+      "id": 1,
+      "score": 0,
+      "completed": false,
+      "board": {
+        "width": 3,
+        "height": 3,
+        "pieces": [
+          [
+            "X",
+            "Y",
+            "Z"
+          ],
+          [
+            "Z",
+            "X",
+            "Y"
+          ],
+          [
+            "Z",
+            "X",
+            "X"
+          ]
+        ]
+      },
+      "nrOfMoves": 15,
+      "targetScore": 200
+    },
+    {
+      "user": 2,
+      "id": 2,
+      "score": 0,
+      "completed": false,
+      "board": {
+        "width": 3,
+        "height": 3,
+        "pieces": [
+          [
+            "Z",
+            "Z",
+            "X"
+          ],
+          [
+            "X",
+            "Y",
+            "Y"
+          ],
+          [
+            "Z",
+            "Z",
+            "Y"
+          ]
+        ]
+      },
+      "nrOfMoves": 15,
+      "targetScore": 200
+    },
+    {
+      "user": 2,
+      "id": 3,
+      "score": 10,
+      "completed": false,
+      "board": {
+        "width": 3,
+        "height": 3,
+        "pieces": [
+          [
+            "X",
+            "X",
+            "Y"
+          ],
+          [
+            "X",
+            "Z",
+            "X"
+          ],
+          [
+            "Y",
+            "Z",
+            "Y"
+          ]
+        ]
+      },
+      "nrOfMoves": 13,
+      "targetScore": 200
+    }
   ]
 }

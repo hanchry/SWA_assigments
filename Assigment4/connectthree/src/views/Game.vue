@@ -31,18 +31,17 @@
                 <error :strongText='model.gamePlay.message' />
             </div>
         </div>
-        <div class="center" v-else>
-            <h2>Continue your games:</h2>
-            <div class='container'>
-                <div class='row'>
-                    <button class='btn btn-light btn-block col-4'
+        <div class="center text-white w-full flex justify-center" v-else>
+            <div class="w-1/3 flex justify-center flex-col">
+                <h2 class="text-4xl font-bold">Continue your games:</h2>
+                <div class='mb-5 mt-5 grid grid-cols-5 grid-rows-auto gap-5'>
+                    <primary-button class='w-full justify-center' :size="'sm'"
                         v-for="game in model.games.filter((game) => !game.completed && game.user === model.user.userId)"
-                        v-bind:key="game.id" @click="continueGame(game.id)">Game {{ game.id }}</button>
+                        v-bind:key="game.id" @click="continueGame(game.id)">Game {{ game.id }}</primary-button>
                 </div>
-            </div>
-            <div>
-                <h2 class='mt-3'>Start a new game:</h2>
-                <button class='btn btn-info' @click="startAnotherGame()">New Game</button>
+                <div>
+                    <primary-button class='btn btn-info' @click="startAnotherGame()">New Game</primary-button>
+                </div>
             </div>
         </div>
     </div>
@@ -52,6 +51,7 @@
 import * as API from '../api/api'
 import { model } from '../store/store'
 import BoardElement from '../components/BoardElement.vue'
+import PrimaryButton from '../components/buttons/PrimaryButton.vue';
 import { defineComponent } from "vue";
 import Error from '../components/alerts/Error.vue';
 
@@ -106,7 +106,8 @@ export default defineComponent({
     },
     components: {
         BoardElement,
-        Error
+        Error,
+        PrimaryButton
     },
 })
 </script>
