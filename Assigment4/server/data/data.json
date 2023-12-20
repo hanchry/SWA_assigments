@@ -17,14 +17,32 @@
       "username": "asd",
       "password": "asd",
       "admin": false
+    },
+    {
+      "username": "dada",
+      "password": "asd",
+      "id": 3,
+      "admin": false
+    },
+    {
+      "username": "test",
+      "password": "test",
+      "id": 4,
+      "admin": false
+    },
+    {
+      "username": "new",
+      "password": "new",
+      "id": 5,
+      "admin": false
     }
   ],
   "games": [
     {
       "user": 2,
       "id": 1,
-      "score": 0,
-      "completed": false,
+      "score": 200,
+      "completed": true,
       "board": {
         "width": 3,
         "height": 3,
@@ -105,6 +123,35 @@
         ]
       },
       "nrOfMoves": 13,
+      "targetScore": 200
+    },
+    {
+      "user": 5,
+      "id": 4,
+      "score": 5,
+      "completed": false,
+      "board": {
+        "width": 3,
+        "height": 3,
+        "pieces": [
+          [
+            "X",
+            "X",
+            "Z"
+          ],
+          [
+            "Y",
+            "Z",
+            "Y"
+          ],
+          [
+            "Y",
+            "X",
+            "Y"
+          ]
+        ]
+      },
+      "nrOfMoves": 14,
       "targetScore": 200
     }
   ]
