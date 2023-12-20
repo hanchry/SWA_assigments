@@ -2,21 +2,21 @@
     <div>
         <div class="center" v-if="playStarted">
             <div>
-                <button class='btn btn-warning' v-if="!model.gamePlay.calculatingMove" @click="backToMain()">Back to main
+                <button class='text-gray-300 mb-2 font-bold border-b' v-if="!model.gamePlay.calculatingMove" @click="backToMain()">Back to main
                     page</button>
             </div>
             <div class='play-info' v-if="!model.game.completed">
-                <div class='play-target-score'>
+                <div class='text-white font-bold'>
                     TARGET SCORE: {{ model.game.targetScore }}
                 </div>
-                <div class='play-score'>
+                <div class='text-white font-bold'>
                     YOUR SCORE: {{ model.game.score }}
                 </div>
-                <div class='play-moves'>
+                <div class='text-white font-bold'>
                     MOVES LEFT: {{ model.game.nrOfMoves }}
                 </div>
             </div>
-            <div class='play-end' v-else>
+            <div class='text-white' v-else>
                 <div v-if="model.game.score >= model.game.targetScore">Congrats! You won with a score of {{
                     model.game.score
                 }} and {{ model.game.nrOfMoves }} moves left.</div>
@@ -27,8 +27,8 @@
                     <BoardElement :rowIndex='index' :colIndex='colIndex' :element='symbol' />
                 </div>
             </div>
-            <div class='play-message'>
-                {{ model.gamePlay.message }}
+            <div v-if="model.gamePlay.message" class='w-full flex justify-center'>
+                <error :strongText='model.gamePlay.message' />
             </div>
         </div>
         <div class="center" v-else>
@@ -53,6 +53,7 @@ import * as API from '../api/api'
 import { model } from '../store/store'
 import BoardElement from '../components/BoardElement.vue'
 import { defineComponent } from "vue";
+import Error from '../components/alerts/Error.vue';
 
 export default defineComponent({
     data() {
@@ -104,18 +105,14 @@ export default defineComponent({
         findGames()
     },
     components: {
-        BoardElement
+        BoardElement,
+        Error
     },
 })
 </script>
 
 
 <style>
-.play-message {
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 20px;
-}
 
 .element {
     width: 50px !important;

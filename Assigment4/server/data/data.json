@@ -20,34 +20,6 @@
     }
   ],
   "games": [
-    {
-      "user": 2,
-      "id": 1,
-      "score": 5,
-      "completed": false,
-      "board": {
-        "width": 3,
-        "height": 3,
-        "pieces": [
-          [
-            "Z",
-            "X",
-            "Y"
-          ],
-          [
-            "Y",
-            "Y",
-            "Z"
-          ],
-          [
-            "X",
-            "Y",
-            "Z"
-          ]
-        ]
-      },
-      "nrOfMoves": 14,
-      "targetScore": 200
-    }
+    
   ]
 }

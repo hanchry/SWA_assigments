@@ -50,8 +50,17 @@ export default defineComponent({
             }
         },
     },
+    mounted() {
+        this.handleMatches(model.game.board);  
+    },
 
     methods: {
+        async handleMatches(board) {
+            const moveResults = BoardModel.checkAndHandleMatch(board, [], this.generator);
+            if (moveResults !== undefined) {
+                await this.handleMoveResults(moveResults);
+            }
+        },
         async selectedElement() {
             if (this.isMoveAllowed()) {
                 this.setSelectedState(true);
@@ -100,6 +109,9 @@ export default defineComponent({
         createUpdatedBoard() {
             const newBoard = JSON.parse(JSON.stringify(model.game.board));
             const selectedPiece = model.gamePlay.selectedPiece;
+            if (!selectedPiece) {
+                return newBoard;
+            }
             newBoard.pieces[selectedPiece.row][selectedPiece.col] = BoardModel.piece(model.game.board, selectedPiece);
             newBoard.pieces[this.rowIndex][this.colIndex] = BoardModel.piece(model.game.board, selectedPiece);
             return newBoard;
@@ -141,6 +153,7 @@ export default defineComponent({
                 this.setSelectedState(false);
             });
             model.setCalculatingMove(false);
+            this.handleMatches(model.game.board);
             this.checkGameCompletion();
         },
         checkGameCompletion() {
