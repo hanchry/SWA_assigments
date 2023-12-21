@@ -73,7 +73,6 @@ export const postScore = createAsyncThunk(
                     Accept: 'application/json',
                 },
             });
-            console.log(response)
             const userResponse = response.data;
             thunkAPI.dispatch(postScoreSuccess(userResponse));
             return userResponse;

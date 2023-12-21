@@ -40,6 +40,40 @@ export const getUser = createAsyncThunk(
         }
     });
 
+export const getUserNameRequest = () => ({
+    type: UserEnums.GET_USER_NAME_REQUEST,
+});
+export const getUserNameSuccess = (user: User) => ({
+    type: UserEnums.GET_USER_NAME_SUCCESS,
+});
+export const getUserNameFailure = (error: string) => ({
+    type: UserEnums.GET_USER_NAME_FAILURE,
+    payload: error,
+});
+export const getUserName = createAsyncThunk(
+    UserEnums.GET_USER_NAME_REQUEST,
+    async (id:string, thunkAPI) => {
+        thunkAPI.dispatch(getUserNameRequest());
+        try {
+            const token = getTokenFromState(thunkAPI.getState());
+            const url = `http://localhost:9090/users/${id}/name?token=${token}`;
+            const response = await axios.get(url, {
+                headers: {
+                    Accept: 'application/json',
+                },
+            });
+
+            const userResponse = response.data;
+            thunkAPI.dispatch(getUserNameSuccess(userResponse));
+            return userResponse;
+        } catch (error) {
+            thunkAPI.dispatch(getUserNameFailure((error as Error).message));
+            return thunkAPI.rejectWithValue({ error: (error as Error).message });
+        }
+    }
+);
+
+
 export const updateUserRequest = () => ({
     type: UserEnums.UPDATE_USER_REQUEST,
 });

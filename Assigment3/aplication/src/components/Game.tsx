@@ -8,13 +8,12 @@ import {postScore} from "../state/actions/ScoreActions";
 import {Score} from "../types/Score";
 
 const Game = () => {
+    const selectBoard = useSelector((state: any) => state.boardReducer.board);
     const dispatch = useDispatch();
-    const [newBoard, setNewBoard] = useState(
-        useSelector((state: any) => state.boardReducer.board)
-    );
+    const [localBoard, setLocalBoard] = useState(selectBoard);
 
     const updateNewBoard = (updatedBoard: Board.Board<any>) => {
-        setNewBoard(updatedBoard);
+        setLocalBoard(updatedBoard);
     };
 
     const [score, setScore] = useState(0);
@@ -26,7 +25,25 @@ const Game = () => {
             scoreRef.current = newScore;
             return newScore;
         });
+        if(!isThereAnyMove(localBoard)){
+            document.getElementById("game-com")!.style.display = "none";
+            document.getElementById("result-com")!.style.display = "flex";
+            saveScore();
+        }
     };
+
+    const isThereAnyMove = (board: Board.Board<any>) => {
+        let moves = 0;
+        for (let i = 0; i < board.height; i++) {
+            for (let j = 0; j < board.width; j++) {
+                if (Board.canMove(board, {row: i, col: j}, {row: i + 1, col: j})) moves++;
+                if (Board.canMove(board, {row: i, col: j}, {row: i - 1, col: j})) moves++;
+                if (Board.canMove(board, {row: i, col: j}, {row: i, col: j + 1})) moves++;
+                if (Board.canMove(board, {row: i, col: j}, {row: i, col: j - 1})) moves++;
+            }
+        }
+        return moves > 0;
+    }
 
     const decreaseScore = () => {
         setScore((prevScore) => {
@@ -37,7 +54,7 @@ const Game = () => {
     };
 
     useEffect(() => {
-        if (!newBoard || newBoard.width === 0) {
+        if (!localBoard || localBoard.width === 0) {
             new Promise((resolve) => {
                 resolve(dispatch(createBoard(3)));
             }).then((response: any) => {
@@ -45,12 +62,7 @@ const Game = () => {
             });
         }
 
-        return () => {
-            if (scoreRef.current > 0) {
-                saveScore();
-            }
-        };
-    }, [dispatch, newBoard]);
+    }, [dispatch, localBoard]);
 
     const saveScore = async () => {
 
@@ -61,33 +73,58 @@ const Game = () => {
         }
         await dispatch(postScore(value) as any);
 
+        new Promise((resolve) => {
+            resolve(dispatch(createBoard(3)));
+        }).then((response: any) => {
+            updateNewBoard(response.payload);
+        });
+
+    }
+    const onForfeit = () => {
+        saveScore();
+        document.getElementById("game-com")!.style.display = "none";
+        document.getElementById("result-com")!.style.display = "flex";
+    }
+    const onPlayAgain = () => {
+        document.getElementById("game-com")!.style.display = "block";
+        document.getElementById("result-com")!.style.display = "none";
+        setScore(0);
     }
 
-    if (!newBoard || newBoard.width === 0) {
+    if (!localBoard || localBoard.width === 0) {
         return <div>Loading...</div>;
     }
 
     return (
         <div>
-            <h1>Score {score}</h1>
-            <div className="boardAction">
-                {[...Array(newBoard.height)].map((_, rowIndex) => (
-                    <div key={rowIndex}>
-                        {[...Array(newBoard.width)].map((_, columnIndex) => (
-                            <div key={columnIndex}>
-                                <GameItem
-                                    key={`${rowIndex}-${columnIndex}`}
-                                    symbol={Board.piece(newBoard, {row: rowIndex, col: columnIndex})}
-                                    position={{row: rowIndex, col: columnIndex}}
-                                    gameBoard={newBoard}
-                                    refreshCallback={updateNewBoard}
-                                    increaseScore={increaseScore}
-                                    decreaseScore={decreaseScore}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                ))}
+            <div id="game-com">
+                <h1>Score {score}</h1>
+                <button onClick={onForfeit} className="button2">Forfeit game</button>
+                <div className="boardAction">
+                    {[...Array(localBoard.height)].map((_, rowIndex) => (
+                        <div key={rowIndex}>
+                            {[...Array(localBoard.width)].map((_, columnIndex) => (
+                                <div key={columnIndex}>
+                                    <GameItem
+                                        key={`${rowIndex}-${columnIndex}`}
+                                        symbol={Board.piece(localBoard, {row: rowIndex, col: columnIndex})}
+                                        position={{row: rowIndex, col: columnIndex}}
+                                        gameBoard={localBoard}
+                                        refreshCallback={updateNewBoard}
+                                        increaseScore={increaseScore}
+                                        decreaseScore={decreaseScore}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div id="result-com">
+                <h1>Result</h1>
+                <p>Game is finished as there is no more possible moves</p>
+                <p>Score: {score}</p>
+                <button onClick={onPlayAgain}>play again</button>
             </div>
         </div>
     );

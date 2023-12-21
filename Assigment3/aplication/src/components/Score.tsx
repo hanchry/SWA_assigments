@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {getScores} from "../state/actions/ScoreActions";
 import {ScoreEnums} from "../state/enums/ScoreEnums";
-import {getUser} from "../state/actions/UserActions";
+import {getUser, getUserName} from "../state/actions/UserActions";
 import {UserEnums} from "../state/enums/UserEnums";
 
 // Define a type for a score object
@@ -18,30 +18,29 @@ const BestScores: React.FC = () => {
 
     const [bestScores, setBestScores] = useState<Score[]>([]);
 
-    const topTen = (scores: Score[]) => {
-        // const uniqueScores = scores.reduce((unique:Score[], score:Score) => {
-        //     const existing = unique.find((s:Score) => s.user === score.user);
-        //
-        //     if (!existing) {
-        //         unique.push(score);
-        //     } else if (score.score > existing.score) {
-        //         existing.score = score.score;
-        //     }
-        //
-        //     return unique;
-        // }, []);
-        console.log(scores);
+    const topTen = async (scores: Score[]) => {
 
         const sortedScores = scores.sort((a, b) => b.score - a.score);
 
-        return sortedScores.slice(0, 10);
+        const tenScores = sortedScores.slice(0, 10);
+        for (let i = 0; i < tenScores.length; i++) {
+            tenScores[i].user = await fetchUserName(tenScores[i].user);
+        }
+        return tenScores;
     }
     const fetchBestScores = async () => {
         const response = await dispatch(getScores() as any);
         if (response.type === ScoreEnums.GET_SCORES_SUCCESS) {
-            setBestScores(topTen(response.payload));
+            setBestScores( await topTen(response.payload));
         }
     };
+    const fetchUserName = async (id:string) => {
+        const response = await dispatch(getUserName(id) as any);
+        if(response.type === UserEnums.GET_USER_NAME_SUCCESS) {
+            return response.payload;
+        }
+        return "User";
+    }
 
     useEffect(() => {
         fetchBestScores();
