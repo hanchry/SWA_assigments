@@ -47,7 +47,7 @@ const createDb = low => {
     const games = () => data.games
     const game = id => data.games.find(g => g.id === id)
     const createGame = req => {
-        const game = {user: req.user, id: data.games.length + 1, score: req.score, completed: req.completed}
+        const game = {user: req.user, id: data.games.length + 1, score: req.score, completed: true}
         data.games.push(game)
         low.write()
         return game
