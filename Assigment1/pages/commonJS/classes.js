@@ -27,6 +27,26 @@ function WeatherData(time, place, value, type, unit) {
 
     return {getValue, getType, getUnit, ...event};
 }
+// class WeatherData extends Event {
+//     constructor(time, place, value, type, unit) {
+//         super(time, place);
+//         this.value = value;
+//         this.type = type;
+//         this.unit = unit;
+//     }
+//
+//     getValue() {
+//         return this.value;
+//     }
+//
+//     getType() {
+//         return this.type;
+//     }
+//
+//     getUnit() {
+//         return this.unit;
+//     }
+// }
 
 function WeatherPrediction(time, place, type, unit, min, max) {
     let event = Event(time, place);
