@@ -277,7 +277,7 @@ function CloudCoverage(time, place, value, type, unit) {
     return {...weatherData};
 }
 
-function CloudCoverage(time, place, value, type, unit) {
-    let weatherData = WeatherData(time, place, value, type, unit);
-    return {...weatherData};
-}
+// function CloudCoverage(time, place, value, type, unit) {
+//     let weatherData = WeatherData(time, place, value, type, unit);
+//     return {...weatherData};
+// }
