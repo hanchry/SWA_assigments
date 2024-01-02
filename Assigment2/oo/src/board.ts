@@ -39,7 +39,6 @@ export class Board<T> {
         this.listeners = [];
         this.generateGrid();
     }
-
     // Private method to generate the grid using the generator
     private generateGrid() {
         for (let h = 0; h < this.height; h++) {
@@ -50,12 +49,10 @@ export class Board<T> {
             this.grid.push(row);
         }
     }
-
     // Method to add a listener to the listeners array
     addListener(listener: BoardListener<T>) {
         this.listeners.push(listener);
     }
-
     // Method to get a piece from the grid using a position
     piece(p: Position): T | undefined {
         if (this.posOutsideGrid(p)){

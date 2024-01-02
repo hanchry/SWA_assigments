@@ -9,7 +9,20 @@ function Event(time, place) {
 
     return {getTime, getPlace};
 }
-
+// function WeatherData(time, place, value, type, unit) {
+//     Event.call(time,place)
+//     this.value = value
+//     this.type = type
+//     this.unit = unit
+// }
+// WeatherData.prototype = Object.create(Event.prototype)
+// WeatherData.prototype.constructor = WeatherData
+// WeatherData.prototype.getValue = function() {
+//     return this.value
+// }
+// WeatherData.prototype.getType = function() {
+//     return this.type
+// }
 function WeatherData(time, place, value, type, unit) {
     let event = Event(time, place);
 
