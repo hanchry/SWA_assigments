@@ -61,6 +61,17 @@ function WeatherData(time, place, value, type, unit) {
 //     }
 // }
 
+// function greet(){
+//    console.log("Hello" + this.name)
+// }
+// const person = {
+//    name: "John",
+// }
+// const greetPerson = greet.bind(person)
+// greetPerson() // Hello John
+
+
+
 function WeatherPrediction(time, place, type, unit, min, max) {
     let event = Event(time, place);
 
