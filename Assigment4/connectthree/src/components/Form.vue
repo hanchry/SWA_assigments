@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
         <div>
-            <label for="username" class="block text-sm font-medium leading-6 text-white">Username</label>
+            <label for="username" class="block text-sm font-medium leading-6 text-white">Username : {{ username }}</label>
             <div class="mt-2">
                 <input id="username" v-model="username" name="username" type="username" autocomplete="username"
                     required
