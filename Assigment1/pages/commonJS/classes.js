@@ -10,7 +10,7 @@ function Event(time, place) {
     return {getTime, getPlace};
 }
 // function WeatherData(time, place, value, type, unit) {
-//     Event.call(time,place)
+//     Event.call(this,time,place)
 //     this.value = value
 //     this.type = type
 //     this.unit = unit
