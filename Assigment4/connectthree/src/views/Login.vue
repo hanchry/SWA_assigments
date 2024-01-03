@@ -18,12 +18,11 @@ import Error from '../components/alerts/Error.vue'
 import PrimaryButton from '../components/buttons/PrimaryButton.vue'
 import FormFields from '../components/Form.vue'
 
-import { model } from '../store/store'
+import { useGameStore } from '../store/store'
 export default {
   components: { PrimaryButton, Error , FormFields },
     data() {
         return {
-            model,
             message: ''
         }
     },
@@ -31,7 +30,8 @@ export default {
         submit(username,password) {
             API.loginUser(username, password).then((result) => {
                 if (result !== 'Invalid username or password') {
-                    model.login(result);
+                    const gameStore = useGameStore();
+                    gameStore.login(result);
                     this.message = '';
                     this.$router.push({ name: 'home' });
                 } else {

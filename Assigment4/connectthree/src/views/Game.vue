@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import * as API from '../api/api'
-import { model } from '../store/store'
+import { useGameStore } from '../store/store'
 import BoardElement from '../components/BoardElement.vue'
 import PrimaryButton from '../components/buttons/PrimaryButton.vue';
 import { defineComponent } from "vue";
@@ -58,7 +58,7 @@ import Error from '../components/alerts/Error.vue';
 export default defineComponent({
     data() {
         return {
-            model,
+            model: useGameStore(),
             playStarted: false,
         }
     },
@@ -68,36 +68,36 @@ export default defineComponent({
         },
         continueGame(id: number) {
             this.playStarted = false;
-            model.emptyGame();
+            this.model.emptyGame();
             let hasBoard = true;
-            API.getGameById(model.user.token!, id)
-                .then((result) => { model.setGame(result), result.board ? hasBoard = true : hasBoard = false })
+            API.getGameById(this.model.user.token!, id)
+                .then((result) => { this.model.setGame(result), result.board ? hasBoard = true : hasBoard = false })
                 .then(() => {
                     if (!hasBoard) {
-                        model.initNewGame();
-                        API.updateGame(model.user.token!, model.game.id, model.game);
+                        this.model.initNewGame();
+                        API.updateGame(this.model.user.token!, this.model.game.id, this.model.game);
                     }
                 })
                 .then(() => this.playStarted = true);
         },
         startAnotherGame() {
             this.playStarted = false;
-            model.emptyGame();
-            model.initNewGame(this.model.user);
+            this.model.emptyGame();
+            this.model.initNewGame(this.model.user);
             API.startNewGame(this.model.user.token!, this.model.game)
                 .then((result) => {
-                    API.updateGame(model.user.token!, result.id, {
-                        ...this.model.game, id: result.id, user: model.user.userId!
+                    API.updateGame(this.model.user.token!, result.id, {
+                        ...this.model.game, id: result.id, user: this.model.user.userId!
                     }),
-                        model.setGame({ ...model.game, id: result.id })
+                        this.model.setGame({ ...this.model.game, id: result.id })
                 })
                 .then(() => this.playStarted = true);
         }
     },
     mounted() {
         const findGames = async () => {
-            API.getAllGames(model.user.token!).then((result) => {
-                model.games = result!
+            API.getAllGames(this.model.user.token!).then((result) => {
+                this.model.games = result!
             })
             setTimeout(findGames, 5000)
         }

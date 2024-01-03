@@ -9,7 +9,7 @@
 <script lang="ts">
 import * as BoardModel from '../model/board';
 import * as api from '../api/api';
-import { model } from '../store/store';
+import { useGameStore } from '../store/store';
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -28,7 +28,7 @@ export default defineComponent({
     },
     data() {
         return {
-            model,
+            model: useGameStore(),
             selected: false,
             generator: new BoardModel.RandomGenerator('X,Y,Z'),
         }
@@ -51,7 +51,7 @@ export default defineComponent({
         },
     },
     mounted() {
-        this.handleMatches(model.game.board);  
+        this.handleMatches(this.model.game.board);  
     },
 
     methods: {
@@ -65,7 +65,7 @@ export default defineComponent({
             if (this.isMoveAllowed()) {
                 this.setSelectedState(true);
                 const currentPosition = { row: this.rowIndex, col: this.colIndex };
-                if (model.gamePlay.selectedPiece) {
+                if (this.model.gamePlay.selectedPiece) {
                     await this.performMove(currentPosition);
                 } else {
                     this.selectCurrentPiece(currentPosition);
@@ -76,17 +76,17 @@ export default defineComponent({
             }
         },
         isMoveAllowed() {
-            return !model.gamePlay.calculatingMove && !model.game.completed;
+            return !this.model.gamePlay.calculatingMove && !this.model.game.completed;
         },
         setSelectedState(state) {
             this.selected = state;
         },
         selectCurrentPiece(position) {
-            model.setSelectedPiece(position);
+            this.model.setSelectedPiece(position);
         },
         async performMove(targetPosition) {
-            model.setCalculatingMove(true);
-            const moveResults = model.gamePlay.selectedPiece ? BoardModel.move(model.gamePlay.selectedPiece, targetPosition, model.game.board,this.generator) : null;
+            this.model.setCalculatingMove(true);
+            const moveResults = this.model.gamePlay.selectedPiece ? BoardModel.move(this.model.gamePlay.selectedPiece, targetPosition, this.model.game.board,this.generator) : null;
             await this.handleMoveResults(moveResults);
             this.finishMove();
         },
@@ -95,25 +95,25 @@ export default defineComponent({
                 this.updateBoardAfterMove(moveResults);
                 await this.processMoveEffects(moveResults.effects);
             } else {
-                model.setSelectedPiece(undefined);
+                this.model.setSelectedPiece(undefined);
                 this.setSelectedState(false);
                 this.displayInvalidMoveMessage();
             }
         },
         updateBoardAfterMove() {
-            model.decreaseMoves();
+            this.model.decreaseMoves();
             const newBoard = this.createUpdatedBoard();
-            model.setBoard(newBoard);
-            model.setSelectedPiece(undefined);
+            this.model.setBoard(newBoard);
+            this.model.setSelectedPiece(undefined);
         },
         createUpdatedBoard() {
-            const newBoard = JSON.parse(JSON.stringify(model.game.board));
-            const selectedPiece = model.gamePlay.selectedPiece;
+            const newBoard = JSON.parse(JSON.stringify(this.model.game.board));
+            const selectedPiece = this.model.gamePlay.selectedPiece;
             if (!selectedPiece) {
                 return newBoard;
             }
-            newBoard.pieces[selectedPiece.row][selectedPiece.col] = BoardModel.piece(model.game.board, selectedPiece);
-            newBoard.pieces[this.rowIndex][this.colIndex] = BoardModel.piece(model.game.board, selectedPiece);
+            newBoard.pieces[selectedPiece.row][selectedPiece.col] = BoardModel.piece(this.model.game.board, selectedPiece);
+            newBoard.pieces[this.rowIndex][this.colIndex] = BoardModel.piece(this.model.game.board, selectedPiece);
             return newBoard;
         },
         async processMoveEffects(effects) {
@@ -127,48 +127,48 @@ export default defineComponent({
         },
         handleMatchEffect(effect) {
             const matchPositions = effect.match?.positions ?? [];
-            model.increaseScore((matchPositions.length - 2) * 5);
-            model.setMatches(matchPositions);
+            this.model.increaseScore((matchPositions.length - 2) * 5);
+            this.model.setMatches(matchPositions);
         },
         async handleRefillEffect(effect) {
-            model.setMessage("Refilling...");
+            this.model.setMessage("Refilling...");
             await this.timeout(1000);
-            model.setBoard(effect.board);
-            model.setMessage('');
-            model.clearMatches();
+            this.model.setBoard(effect.board);
+            this.model.setMessage('');
+            this.model.clearMatches();
 
-            if (model.gamePlay.selectedPiece) {
-                model.setSelectedPiece(undefined);
+            if (this.model.gamePlay.selectedPiece) {
+                this.model.setSelectedPiece(undefined);
                 this.setSelectedState(false);
             }
         },
 
         displayInvalidMoveMessage() {
-            model.setMessage("MOVE NOT ALLOWED");
-            setTimeout(() => model.setMessage(''), 1000);
+            this.model.setMessage("MOVE NOT ALLOWED");
+            setTimeout(() => this.model.setMessage(''), 1000);
         },
         finishMove() {
-            model.setSelectedPiece(undefined);
+            this.model.setSelectedPiece(undefined);
             this.$nextTick(() => {
                 this.setSelectedState(false);
             });
-            model.setCalculatingMove(false);
-            this.handleMatches(model.game.board);
+            this.model.setCalculatingMove(false);
+            this.handleMatches(this.model.game.board);
             this.checkGameCompletion();
         },
         checkGameCompletion() {
-            if (model.game.score >= model.game.targetScore || (model.game.nrOfMoves === 0 && model.game.score < model.game.targetScore)) {
+            if (this.model.game.score >= this.model.game.targetScore || (this.model.game.nrOfMoves === 0 && this.model.game.score < this.model.game.targetScore)) {
                 this.endGame();
             } else {
                 this.updateGameStatus();
             }
         },
         endGame() {
-            model.endGame();
-            api.updateGame(model.user.token!, model.game.id, { ...model.game, completed: true });
+            this.model.endGame();
+            api.updateGame(this.model.user.token!, this.model.game.id, { ...this.model.game, completed: true });
         },
         updateGameStatus() {
-            api.updateGame(model.user.token!, model.game.id, model.game);
+            api.updateGame(this.model.user.token!, this.model.game.id, this.model.game);
         },
         timeout(delay) {
             return new Promise(res => setTimeout(res, delay));

@@ -8,7 +8,7 @@ import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import BestScores from "@/views/BestScores.vue";
 import NotFound from "@/views/NotFound.vue";
-import { model } from '../store/store'
+import { useGameStore } from '../store/store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,7 +24,7 @@ const router = createRouter({
           path: "/scoreboard",
           name: "scoreboard",
           component: BestScores,
-          props: () => ({ model: model })
+          props: () => ({ model: useGameStore() }),
         },
       ],
       meta: {
@@ -49,6 +49,7 @@ router.beforeEach((to, from, next) => {
 });
 
 function isUserLoggedIn() {
+  const model = useGameStore();
   return model.user.token !== undefined;
 }
 

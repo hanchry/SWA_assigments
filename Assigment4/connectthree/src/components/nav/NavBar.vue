@@ -23,7 +23,7 @@
 
 <script>
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
-import { model } from '../../store/store'
+import { useGameStore } from '../../store/store'
 import * as API from '../../api/api'
 
 export default {
@@ -32,7 +32,9 @@ export default {
     },
     methods: {
         logout() {
+            const model = useGameStore();
             API.logoutUser(model.user.token).then(() => {
+                const model = useGameStore();
                 model.logout();
                 this.$router.push({ name: 'login' });
             });   

@@ -12,12 +12,12 @@ import Error from '../components/alerts/Error.vue'
 import PrimaryButton from '../components/buttons/PrimaryButton.vue'
 import FormFields from '../components/Form.vue'
 
-import { model } from '../store/store'
+import { useGameStore } from '../store/store'
 export default {
     components: { PrimaryButton, Error , FormFields },
     data() {
         return {
-            model,
+            model: useGameStore(),
             message: ''
         }
     },

@@ -153,6 +153,35 @@
       },
       "nrOfMoves": 14,
       "targetScore": 200
+    },
+    {
+      "user": 2,
+      "id": 5,
+      "score": 10,
+      "completed": false,
+      "board": {
+        "width": 3,
+        "height": 3,
+        "pieces": [
+          [
+            "Y",
+            "X",
+            "X"
+          ],
+          [
+            "X",
+            "Z",
+            "X"
+          ],
+          [
+            "Z",
+            "Y",
+            "Z"
+          ]
+        ]
+      },
+      "nrOfMoves": 13,
+      "targetScore": 200
     }
   ]
 }
